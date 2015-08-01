@@ -40,3 +40,14 @@
     name=nginx
     state=started
     enabled=yes
+
+- name: Deploy tls_params
+  tags: nginx
+  notify: restart nginx
+  become: true
+  template:
+    src="{{ tlsparams_template|default("builtin_tls_params.j2") }}"
+    dest=/etc/nginx/tls_params
+    owner=0
+    group=0
+    mode=0644

@@ -14,8 +14,11 @@ A role to deploy nginx
 
 * ``nginx_worker_processes``: Amount of nginx worker processes (int, default: "{{ ansible_processor_vcpus }}" )
 * ``nginx_worker_connections``: Amount of nginx worker connections (int, default 768)
-* ``nginx_user``: The nginx user (string, default: CentOS 7: nginx, Ubuntu: www-data)
-* ``nginxconf_template``: The nginx.conf template to use (string, default: builtin_nginx.conf.j2)
+* ``nginx_user``: Nginx user (string, default: CentOS 7: nginx, Ubuntu: www-data)
+* ``nginxconf_template``: Template to use for nginx.conf(string, default: builtin_nginx.conf.j2)
+* ``nginx_ssl_protocols``: SSL protocols to support (string, default: TLSv1.1 TLSv1.2)
+* ``nginx_ssl_cipher_suite``: SSL cipher suites to support (string, default is in defaults/main.yml)
+* ``tlsparams_template``: Template to use for tls_params (string, default: builtin_tls_params.j2)
 
 ## Example Playbook
 
