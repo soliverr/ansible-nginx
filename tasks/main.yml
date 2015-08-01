@@ -1,2 +1,42 @@
 ---
 # tasks file for ansible-nginx
+
+- name: Assert supported OS
+  tags: nginx
+  assert:
+    that: (ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7') or
+          ansible_distribution_release == 'trusty'
+
+- name: Include OS familiy specific vars
+  tags: nginx
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Enable EPEL
+  tags: nginx
+  become: true
+  yum: name=epel-release state=installed
+  when: ansible_distribution == 'CentOS'
+
+- name: Install nginx
+  tags: nginx
+  become: true
+  action: "{{ ansible_pkg_mgr }} name=nginx state=installed"
+
+- name: Deploy nginx.conf
+  tags: nginx
+  notify: restart nginx
+  become: true
+  template:
+    src="{{ nginxconf_template|default("builtin_nginx.conf.j2") }}"
+    dest=/etc/nginx/nginx.conf
+    owner=0
+    group=0
+    mode=0644
+
+- name: Start and enable nginx
+  tags: nginx
+  become: true
+  service:
+    name=nginx
+    state=started
+    enabled=yes

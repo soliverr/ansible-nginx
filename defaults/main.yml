@@ -1,2 +1,5 @@
 ---
 # defaults file for ansible-nginx
+
+nginx_worker_processes: "{{ ansible_processor_vcpus }}"
+nginx_worker_connections: 768

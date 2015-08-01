@@ -1,36 +1,21 @@
 # ansible-nginx
 
-## Synopsis
-
-Synopsis...
-
 ## Description
 
-Description...
+A role to deploy nginx
 
 ## Requirements
 
-Requirements...
+* CentOS 7
+* Ubuntu Trusty
+
 
 ## Role Variables
 
-* ``variable_name``: Variable description (<!variable type>, default: ``variable default value``)
-
-### complex_variable_name
-
-Complex variable documentation...
-
-### another_complex_variable_name
-
-Complex variable documentation...
-
-## Dependencies
-
-Dependencies...
-
-### Dependency variables
-
-Dependency variables documentation...
+* ``nginx_worker_processes``: Amount of nginx worker processes (int, default: "{{ ansible_processor_vcpus }}" )
+* ``nginx_worker_connections``: Amount of nginx worker connections (int, default 768)
+* ``nginx_user``: The nginx user (string, default: CentOS 7: nginx, Ubuntu: www-data)
+* ``nginxconf_template``: The nginx.conf template to use (string, default: builtin_nginx.conf.j2)
 
 ## Example Playbook
 
@@ -49,7 +34,7 @@ branch and create pull requests back to the origin ``next`` branch.
 
 ## License
 
-Apache Version 2.0
+GNU AFFERO GENERAL PUBLIC LICENSE Version 3
 
 ## Integration testing
 
@@ -81,7 +66,7 @@ Ruby with rake and bundler available.
 
 ## Author information
 
-<!Author Name> @<!email_prefix> <!email_suffix>
+Alvaro Aleman @aleman silpion.de
 
 
 <!-- vim: set nofen ts=4 sw=4 et: -->
