@@ -33,14 +33,6 @@
     group=0
     mode=0644
 
-- name: Start and enable nginx
-  tags: nginx
-  become: true
-  service:
-    name=nginx
-    state=started
-    enabled=yes
-
 - name: Deploy tls_params
   tags: nginx
   notify: restart nginx
@@ -51,3 +43,58 @@
     owner=0
     group=0
     mode=0644
+
+- name: Deploy proxy_params
+  tags: nginx
+  notify: reload nginx
+  become: true
+  copy:
+    src=proxy_params
+    dest=/etc/nginx/proxy_params
+    owner=0
+    group=0
+    mode=0644
+
+- name: Deploy vhosts
+  tags: nginx
+  notify: reload nginx
+  become: true
+  with_items: nginx_vhosts
+  template:
+    src="{{ item.template|default("builtin_rproxy.j2") }}"
+    dest="/etc/nginx/conf.d/{{ item.servername }}.conf"
+    owner=0
+    group=0
+    mode=0644
+
+- name: Deploy SSL Certs
+  tags: nginx
+  notify: reload nginx
+  become: true
+  with_items: nginx_vhosts_with_certandkey
+  copy:
+    src="{{ item.sslcert }}"
+    dest="{{ item.sslcertbasepath|default(nginx_default_certbasepath) }}/{{ item.sslcert }}"
+    owner=0
+    group=0
+    mode=0644
+
+- name: Deploy SSL Keys
+  tags: nginx
+  notify: reload nginx
+  become: true
+  with_items: nginx_vhosts_with_certandkey
+  copy:
+    src="{{ item.sslkey }}"
+    dest="{{ item.sslkeybasepath|default(nginx_default_keybasepath) }}/{{ item.sslkey }}"
+    owner=0
+    group=0
+    mode=0600
+
+- name: Start and enable nginx
+  tags: nginx
+  become: true
+  service:
+    name=nginx
+    state=started
+    enabled=yes

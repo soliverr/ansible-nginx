@@ -4,3 +4,8 @@
   tags: nginx
   become: true
   service: name=nginx state=restarted
+
+- name: reload nginx
+  tags: nginx
+  become: true
+  service: name=nginx state=reloaded

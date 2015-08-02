@@ -1,1 +1,3 @@
 nginx_user_default: nginx
+nginx_default_certbasepath: '/etc/pki/tls/certs'
+nginx_default_keybasepath: '/etc/pki/tls/private'

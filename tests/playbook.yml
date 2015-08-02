@@ -1,4 +1,17 @@
 ---
 - hosts: all
+  vars:
+    nginx_vhosts:
+      - servername: nullsrv.example.com
+        template: null.j2
+      - servername: nullsrvwithkey.example.com
+        template: null.j2
+        sslcert: nullcert.pem
+        sslkey: nullkey.key
+      - servername: actualserver.example.com
+        upstreamserverproto: https
+        upstreamserver: google.de
+        sslcert: testcert.pem
+        sslkey: testkey.key
   roles:
     - { role: ansible-nginx }

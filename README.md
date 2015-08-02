@@ -20,6 +20,37 @@ A role to deploy nginx
 * ``nginx_ssl_cipher_suite``: SSL cipher suites to support (string, default is in defaults/main.yml)
 * ``tlsparams_template``: Template to use for tls_params (string, default: builtin_tls_params.j2)
 
+## nginx_vhosts
+
+This role allows to deploy vhosts using the ``nginx_vhosts`` list variable.
+
+There are two approaches to this. The first one is to pass a templates to the role:
+
+    nginx_vhosts:
+      - servername: myveryownhost.example.com
+        template: mytemplate.j2
+        myowntemplatevariable: True
+
+The above specified ``myowntemplatevariable`` is not mandatory. It may be accessed
+from the template by using ``{{ item.myowntemplatevariable }}``.
+
+The second approach is to use the provided ``builtin_rproy.j2`` template which is
+a standard reverse proxy with a HTTP 302 redirect to HTTPS for all HTTP requests.
+
+Below is a sample ``nginx_vhosts`` with all possible options.
+
+    nginx_vhosts:
+      - servername: reverseproxy.example.com
+        sslcert: mycert.pem
+        sslkey:  mykey.key
+        upstreamserver: backend.example.com
+        https_port: 90001                       #default: 443
+        http_port: 9000                         #default: 80
+        sslcertbasepath: /certs                 #default: Debian: ``/etc/ssl/certs`` CentOS: ``/etc/pki/tls/certs``
+        sslkeybasepath: /keys                   #default: Debian: ``/etc/ssl/private`` CentOS: ``/etc/pki/tls/private``
+        maxbodysize: 0                          #default: 10m
+        upstreamserverproto: https              #default: http
+
 ## Example Playbook
 
     - hosts: all
