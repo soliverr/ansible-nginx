@@ -10,8 +10,8 @@ server {
 
 server {
     listen {{ item.https_port|default("443") }} ssl;
-    ssl_certificate {{ item.sslcertbasepath|default(nginx_default_certbasepath) }}/{{ item.sslcert }};
-    ssl_certificate_key {{ item.sslkeybasepath|default(nginx_default_keybasepath) }}/{{ item.sslkey }};
+    ssl_certificate {{ item.sslcertbasepath|default(nginx_default_sslkeycert[0].sslcertbasepath)|default(nginx_default_certbasepath) }}/{{ item.sslcert|default(nginx_default_sslkeycert[0].sslcert) }};
+    ssl_certificate_key {{ item.sslkeybasepath|default(nginx_default_sslkeycert[0].sslkeybasepath)|default(nginx_default_keybasepath) }}/{{ item.sslkey|default(nginx_default_sslkeycert[0].sslkey) }};
 
     server_name {{ item.servername }};
     client_max_body_size {{ item.maxbodysize|default("10m") }};

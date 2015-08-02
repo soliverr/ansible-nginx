@@ -20,7 +20,7 @@ A role to deploy nginx
 * ``nginx_ssl_cipher_suite``: SSL cipher suites to support (string, default is in defaults/main.yml)
 * ``tlsparams_template``: Template to use for tls_params (string, default: builtin_tls_params.j2)
 
-## nginx_vhosts
+### nginx_vhosts
 
 This role allows to deploy vhosts using the ``nginx_vhosts`` list variable.
 
@@ -50,6 +50,17 @@ Below is a sample ``nginx_vhosts`` with all possible options.
         sslkeybasepath: /keys                   #default: Debian: ``/etc/ssl/private`` CentOS: ``/etc/pki/tls/private``
         maxbodysize: 0                          #default: 10m
         upstreamserverproto: https              #default: http
+
+### nginx_default_sslkeycert
+
+In case you use a wildcard certificate which should be used for all vhosts and
+you dont want to specifiy it repteatedly for each list entry, you can declare it like this:
+
+    nginx_default_sslkeycert
+      - sslcert: wildcard.pem
+        sslkey: wildcard.key
+        sslcertbasepath: /certs                 #default: Debian: ``/etc/ssl/certs`` CentOS: ``/etc/pki/tls/certs``
+        sslkeybasepath: /keys                   #default: Debian: ``/etc/ssl/private`` CentOS: ``/etc/pki/tls/private``
 
 ## Example Playbook
 
