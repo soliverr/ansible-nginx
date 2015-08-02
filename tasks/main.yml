@@ -22,6 +22,14 @@
   become: true
   action: "{{ ansible_pkg_mgr }} name=nginx state=installed"
 
+- name: Ensure default vhost is absent
+  tags: nginx
+  notify: reload nginx
+  become: true
+  file:
+    state=absent
+    path=/etc/nginx/sites-enabled/default
+
 - name: Deploy nginx.conf
   tags: nginx
   notify: restart nginx
