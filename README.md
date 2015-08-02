@@ -12,13 +12,13 @@ A role to deploy nginx
 
 ## Role Variables
 
-* ``nginx_worker_processes``: Amount of nginx worker processes (int, default: "{{ ansible_processor_vcpus }}" )
-* ``nginx_worker_connections``: Amount of nginx worker connections (int, default 768)
-* ``nginx_user``: Nginx user (string, default: CentOS 7: nginx, Ubuntu: www-data)
-* ``nginxconf_template``: Template to use for nginx.conf(string, default: builtin_nginx.conf.j2)
-* ``nginx_ssl_protocols``: SSL protocols to support (string, default: TLSv1.1 TLSv1.2)
-* ``nginx_ssl_cipher_suite``: SSL cipher suites to support (string, default is in defaults/main.yml)
-* ``tlsparams_template``: Template to use for tls_params (string, default: builtin_tls_params.j2)
+* ``nginx_worker_processes``: Amount of nginx worker processes (int, default: ``{{ ansible_processor_vcpus }}`` )
+* ``nginx_worker_connections``: Amount of nginx worker connections (int, default: ``768``)
+* ``nginx_user``: Nginx user (string, default: CentOS 7: ``nginx``, Ubuntu: ``www-data``)
+* ``nginxconf_template``: Template to use for nginx.conf(string, default: ``builtin_nginx.conf.j2``)
+* ``nginx_ssl_protocols``: SSL protocols to support (string, default: ``TLSv1.1 TLSv1.2``)
+* ``nginx_ssl_cipher_suite``: SSL cipher suites to support (string, default can be found in defaults/main.yml)
+* ``tlsparams_template``: Template to use for tls_params (string, default: ``builtin_tls_params.j2``)
 
 ### nginx_vhosts
 
@@ -46,8 +46,8 @@ Below is a sample ``nginx_vhosts`` with all possible options.
         upstreamserver: backend.example.com
         https_port: 90001                       #default: 443
         http_port: 9000                         #default: 80
-        sslcertbasepath: /certs                 #default: Debian: ``/etc/ssl/certs`` CentOS: ``/etc/pki/tls/certs``
-        sslkeybasepath: /keys                   #default: Debian: ``/etc/ssl/private`` CentOS: ``/etc/pki/tls/private``
+        sslcertbasepath: /certs                 #default: Debian: /etc/ssl/certs CentOS: /etc/pki/tls/certs
+        sslkeybasepath: /keys                   #default: Debian: /etc/ssl/private CentOS: /etc/pki/tls/private
         maxbodysize: 0                          #default: 10m
         upstreamserverproto: https              #default: http
 
@@ -59,8 +59,8 @@ you dont want to specifiy it repteatedly for each list entry, you can declare it
     nginx_default_sslkeycert
       - sslcert: wildcard.pem
         sslkey: wildcard.key
-        sslcertbasepath: /certs                 #default: Debian: ``/etc/ssl/certs`` CentOS: ``/etc/pki/tls/certs``
-        sslkeybasepath: /keys                   #default: Debian: ``/etc/ssl/private`` CentOS: ``/etc/pki/tls/private``
+        sslcertbasepath: /certs                 #default: Debian: /etc/ssl/certs CentOS: /etc/pki/tls/certs
+        sslkeybasepath: /keys                   #default: Debian: /etc/ssl/private CentOS: /etc/pki/tls/private
 
 ## Example Playbook
 
