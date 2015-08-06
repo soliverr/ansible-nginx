@@ -36,14 +36,14 @@ There are two approaches to this. The first one is to pass a templates to the ro
 The above specified ``myowntemplatevariable`` is not mandatory. It may be accessed
 from the template by using ``{{ item.myowntemplatevariable }}``.
 
-The second approach is to use the provided ``builtin_rproy.j2`` template which is
+The second approach is to use the provided ``builtin_rproxy.j2`` template which is
 a standard reverse proxy with a HTTP 302 redirect to HTTPS for all HTTP requests.
 
 Below is a sample ``nginx_vhosts`` with all possible options.
 
     nginx_vhosts:
       - servername: reverseproxy.example.com
-        upstreamserver: backend.example.com
+        upstreamserver: backend.example.com:80  #The port may be left empty
         sslcert: /etc/pki/tls/certs/my.crt      #default: nginx_default_sslcert
         sslkey:  /etc/pki/tls/private/my.key    #default: nginx_default_sslkey
         https_port: 90001                       #default: 443

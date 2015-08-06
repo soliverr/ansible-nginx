@@ -2,7 +2,7 @@ server {
     listen {{ item.http_port|default("80") }};
 
     server_name {{ item.servername }};
-    return 302 https://$server_name$request_uri;  # enforce https
+    return 302 https://$host$request_uri;  # enforce https
 
     error_log /var/log/nginx/{{ item.servername }}-error.log;
     access_log /var/log/nginx/{{ item.servername }}-access.log;
