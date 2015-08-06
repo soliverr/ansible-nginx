@@ -1,3 +1,1 @@
 nginx_user_default: www-data
-nginx_default_certbasepath: '/etc/ssl/certs'
-nginx_default_keybasepath: '/etc/ssl/private'

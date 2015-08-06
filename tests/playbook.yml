@@ -1,22 +1,33 @@
 ---
 - hosts: all
   vars:
-   nginx_default_sslkeycert:
-      - sslcert: wildcard.pem
-        sslkey: wildcard.key
-   nginx_vhosts:
+    nginx_default_sslcert: '/tmp/wildcard.pem'
+    nginx_default_sslkey: '/tmp/wildcard.key'
+    nginx_vhosts:
       - servername: nullsrv.example.com
         template: null.j2
       - servername: nullsrvwithkey.example.com
         template: null.j2
-        sslcert: nullcert.pem
-        sslkey: nullkey.key
       - servername: actualserver.example.com
         upstreamserverproto: https
         upstreamserver: google.de
-        sslcert: testcert.pem
-        sslkey: testkey.key
+        sslcert: /tmp/testcert.pem
+        sslkey: /tmp/testkey.key
       - servername: minimalproxy.example.com
         upstreamserver: google.com
+  pre_tasks:
+    - name: Copy testcerts
+      with_items:
+        - { name: 'testcert.pem', mode: '0644' }
+        - { name: 'wildcard.pem', mode: '0644' }
+        - { name: 'testkey.key', mode: '0600' }
+        - { name: 'wildcard.key', mode: '0600' }
+      become: true
+      copy:
+        src="{{ item.name }}"
+        dest="/tmp/{{ item.name }}"
+        owner=0
+        group=0
+        mode="{{ item.mode }}"
   roles:
     - { role: ansible-nginx }

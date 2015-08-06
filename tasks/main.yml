@@ -75,30 +75,6 @@
     group=0
     mode=0644
 
-- name: Deploy SSL Certs
-  tags: nginx
-  notify: reload nginx
-  become: true
-  with_items: nginx_vhosts_with_certandkey
-  copy:
-    src="{{ item.sslcert }}"
-    dest="{{ item.sslcertbasepath|default(nginx_default_certbasepath) }}/{{ item.sslcert }}"
-    owner=0
-    group=0
-    mode=0644
-
-- name: Deploy SSL Keys
-  tags: nginx
-  notify: reload nginx
-  become: true
-  with_items: nginx_vhosts_with_certandkey
-  copy:
-    src="{{ item.sslkey }}"
-    dest="{{ item.sslkeybasepath|default(nginx_default_keybasepath) }}/{{ item.sslkey }}"
-    owner=0
-    group=0
-    mode=0600
-
 - name: Start and enable nginx
   tags: nginx
   become: true

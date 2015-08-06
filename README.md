@@ -19,6 +19,8 @@ A role to deploy nginx
 * ``nginx_ssl_protocols``: SSL protocols to support (string, default: ``TLSv1.1 TLSv1.2``)
 * ``nginx_ssl_cipher_suite``: SSL cipher suites to support (string, default can be found in defaults/main.yml)
 * ``tlsparams_template``: Template to use for tls_params (string, default: ``builtin_tls_params.j2``)
+* ``nginx_default_sslcert``: SSL cert to default to if not specified inside vhost(string)
+* ``nginx_default_sslkey``: SSL key to default to if not specified inside vhost(string)
 
 ### nginx_vhosts
 
@@ -41,26 +43,13 @@ Below is a sample ``nginx_vhosts`` with all possible options.
 
     nginx_vhosts:
       - servername: reverseproxy.example.com
-        sslcert: mycert.pem
-        sslkey:  mykey.key
         upstreamserver: backend.example.com
+        sslcert: /etc/pki/tls/certs/my.crt      #default: nginx_default_sslcert
+        sslkey:  /etc/pki/tls/private/my.key    #default: nginx_default_sslkey
         https_port: 90001                       #default: 443
         http_port: 9000                         #default: 80
-        sslcertbasepath: /certs                 #default: Debian: /etc/ssl/certs CentOS: /etc/pki/tls/certs
-        sslkeybasepath: /keys                   #default: Debian: /etc/ssl/private CentOS: /etc/pki/tls/private
         maxbodysize: 0                          #default: 10m
         upstreamserverproto: https              #default: http
-
-### nginx_default_sslkeycert
-
-In case you use a wildcard certificate which should be used for all vhosts and
-you dont want to specifiy it repteatedly for each list entry, you can declare it like this:
-
-    nginx_default_sslkeycert
-      - sslcert: wildcard.pem
-        sslkey: wildcard.key
-        sslcertbasepath: /certs                 #default: Debian: /etc/ssl/certs CentOS: /etc/pki/tls/certs
-        sslkeybasepath: /keys                   #default: Debian: /etc/ssl/private CentOS: /etc/pki/tls/private
 
 ## Example Playbook
 
