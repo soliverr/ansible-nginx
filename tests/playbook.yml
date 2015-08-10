@@ -3,6 +3,7 @@
   vars:
     nginx_default_sslcert: '/tmp/wildcard.pem'
     nginx_default_sslkey: '/tmp/wildcard.key'
+    nginx_enable_ipv6: true
     nginx_vhosts:
       - servername: nullsrv.example.com
         template: null.j2

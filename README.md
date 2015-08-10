@@ -21,6 +21,7 @@ A role to deploy nginx
 * ``tlsparams_template``: Template to use for tls_params (string, default: ``builtin_tls_params.j2``)
 * ``nginx_default_sslcert``: SSL cert to default to if not specified inside vhost(string)
 * ``nginx_default_sslkey``: SSL key to default to if not specified inside vhost(string)
+* ``nginx_enable_ipv6``: Wether to enable ipv6 listening(boolean, default: ``false``)
 
 ### nginx_vhosts
 

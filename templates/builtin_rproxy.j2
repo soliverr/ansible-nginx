@@ -1,5 +1,6 @@
 server {
-    listen {{ item.http_port|default("80") }};
+    listen {{ item.http_port|default("80")}} ssl;
+    {% if nginx_enable_ipv6 %}listen [::]:{{ item.http_port|default("80")}} ssl {% endif %};
 
     server_name {{ item.servername }};
     return 302 https://$host$request_uri;  # enforce https
@@ -9,7 +10,8 @@ server {
 }
 
 server {
-    listen {{ item.https_port|default("443") }} ssl;
+    listen {{ item.http_port|default("443")}} ssl;
+    {% if nginx_enable_ipv6 %}listen [::]:{{ item.http_port|default("443")}} ssl {% endif %};
     ssl_certificate {{ item.sslcert|default(nginx_default_sslcert) }};
     ssl_certificate_key {{ item.sslkey|default(nginx_default_sslkey) }};
 
