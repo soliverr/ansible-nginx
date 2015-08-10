@@ -17,30 +17,30 @@
 {% endif %}
 
 server {
-    listen {{ item.http_port|default('80')}} ssl;
-    {% if nginx_ipv6_enable %}listen [::]:{{ item.http_port|default('80')}} ssl; {% endif %}
+  listen {{ item.http_port|default('80')}} ssl;
+  {% if nginx_ipv6_enable %}listen [::]:{{ item.http_port|default('80')}} ssl; {% endif %}
 
-    server_name {{ item.servername }};
-    return 302 https://$host$request_uri;
+  server_name {{ item.servername }};
+  return 302 https://$host$request_uri;
 
-    error_log /var/log/nginx/{{ item.servername }}-error.log;
-    access_log /var/log/nginx/{{ item.servername }}-access.log;
+  error_log /var/log/nginx/{{ item.servername }}-error.log;
+  access_log /var/log/nginx/{{ item.servername }}-access.log;
 }
 
 server {
-    listen {{ item.http_port|default('443')}} ssl;
-    {% if nginx_ipv6_enable %}listen [::]:{{ item.http_port|default('443')}} ssl; {% endif %}
-    ssl_certificate {{ item.sslcert|default(nginx_default_sslcert) }};
-    ssl_certificate_key {{ item.sslkey|default(nginx_default_sslkey) }};
+  listen {{ item.http_port|default('443')}} ssl;
+  {% if nginx_ipv6_enable %}listen [::]:{{ item.http_port|default('443')}} ssl; {% endif %}
+  ssl_certificate {{ item.sslcert|default(nginx_default_sslcert) }};
+  ssl_certificate_key {{ item.sslkey|default(nginx_default_sslkey) }};
 
-    server_name {{ item.servername }};
-    client_max_body_size {{ item.maxbodysize|default('10m') }};
+  server_name {{ item.servername }};
+  client_max_body_size {{ item.maxbodysize|default('10m') }};
 
-    location / {
-        include /etc/nginx/proxy_params;
-        proxy_pass {{ item.upstreamserverproto|default('http') }}://{{ item.upstreamserver }};
-    }
+  location / {
+    include /etc/nginx/proxy_params;
+    proxy_pass {{ item.upstreamserverproto|default('http') }}://{{ item.upstreamserver }};
+  }
 
-    error_log /var/log/nginx/{{ item.servername }}-error.log;
-    access_log /var/log/nginx/{{ item.servername }}-access.log;
+  error_log /var/log/nginx/{{ item.servername }}-error.log;
+  access_log /var/log/nginx/{{ item.servername }}-access.log;
 }
