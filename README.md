@@ -12,16 +12,17 @@ A role to deploy nginx
 
 ## Role Variables
 
-* ``nginx_worker_processes``: Amount of nginx worker processes (int, default: ``{{ ansible_processor_vcpus }}`` )
+* ``nginx_worker_processes``: Amount of nginx worker processes (int, default: ``{{ ansible_processor_vcpus }}``)
 * ``nginx_worker_connections``: Amount of nginx worker connections (int, default: ``768``)
-* ``nginx_user``: Nginx user (string, default: CentOS 7: ``nginx``, Ubuntu: ``www-data``)
-* ``nginxconf_template``: Template to use for nginx.conf(string, default: ``builtin_nginx.conf.j2``)
+* ``nginx_user``: Nginx service user (string, default: CentOS 7: ``nginx``, Ubuntu: ``www-data``)
+* ``nginx_template_conf``: Template to use for nginx.conf (string, default: ``builtin_nginx.conf.j2``)
 * ``nginx_ssl_protocols``: SSL protocols to support (string, default: ``TLSv1.1 TLSv1.2``)
 * ``nginx_ssl_cipher_suite``: SSL cipher suites to support (string, default can be found in defaults/main.yml)
-* ``tlsparams_template``: Template to use for tls_params (string, default: ``builtin_tls_params.j2``)
-* ``nginx_default_sslcert``: SSL cert to default to if not specified inside vhost(string)
-* ``nginx_default_sslkey``: SSL key to default to if not specified inside vhost(string)
-* ``nginx_enable_ipv6``: Wether to enable ipv6 listening(boolean, default: ``false``)
+* ``nginx_template_params_tls``: Template to use for tls\_params (string, default: ``builtin_tls_params.j2``)
+* ``nginx_default_sslcert``: SSL cert to default to if not specified inside vhost (string, default: ``undefined``)
+* ``nginx_default_sslkey``: SSL key to default to if not specified inside vhost (string, default: ``undefined``)
+* ``nginx_ipv6_enable``: Whether to enable ipv6 listening (boolean, default: ``false``)
+* ``nginx_vhosts``: Dictionary to configure nginx virtual hosts (dict, default: ``[]``)
 
 ### nginx_vhosts
 
@@ -44,13 +45,13 @@ Below is a sample ``nginx_vhosts`` with all possible options.
 
     nginx_vhosts:
       - servername: reverseproxy.example.com
-        upstreamserver: backend.example.com:80  #The port may be left empty
-        sslcert: /etc/pki/tls/certs/my.crt      #default: nginx_default_sslcert
-        sslkey:  /etc/pki/tls/private/my.key    #default: nginx_default_sslkey
-        https_port: 90001                       #default: 443
-        http_port: 9000                         #default: 80
-        maxbodysize: 0                          #default: 10m
-        upstreamserverproto: https              #default: http
+        upstreamserver: backend.example.com:80  # The port may be left empty (mandatory)
+        sslcert: /etc/pki/tls/certs/my.crt      # default: nginx_default_sslcert
+        sslkey:  /etc/pki/tls/private/my.key    # default: nginx_default_sslkey
+        https_port: 90001                       # default: 443
+        http_port: 9000                         # default: 80
+        maxbodysize: 0                          # default: 10m
+        upstreamserverproto: https              # default: http
 
 ## Example Playbook
 
