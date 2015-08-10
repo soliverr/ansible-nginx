@@ -1,11 +1,14 @@
 ---
-# handlers file for ansible-nginx
 - name: restart nginx
   tags: nginx
   become: true
-  service: name=nginx state=restarted
+  service:
+    state: restarted
+    name: nginx
 
-- name: reload nginx
+- name: service reload nginx
   tags: nginx
   become: true
-  service: name=nginx state=reloaded
+  service:
+    state: reloaded
+    name: nginx
