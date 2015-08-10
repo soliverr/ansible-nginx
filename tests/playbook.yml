@@ -4,6 +4,7 @@
     nginx_default_sslcert: '/tmp/wildcard.pem'
     nginx_default_sslkey: '/tmp/wildcard.key'
     nginx_enable_ipv6: true
+    util_template_use_cow: false
     nginx_vhosts:
       - servername: nullsrv.example.com
         template: null.j2
