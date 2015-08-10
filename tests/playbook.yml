@@ -1,21 +1,21 @@
 ---
 - hosts: all
   vars:
-    nginx_default_sslcert: '/tmp/wildcard.pem'
-    nginx_default_sslkey: '/tmp/wildcard.key'
-    nginx_enable_ipv6: true
+    nginx_default_sslcert: '/etc/wildcard.pem'
+    nginx_default_sslkey: '/etc/wildcard.key'
+    nginx_ipv6_enable: true
     util_template_use_cow: false
     nginx_vhosts:
       - servername: nullsrv.example.com
         template: null.j2
       - servername: nullsrvwithkey.example.com
         template: null.j2
-      - servername: actualserver.example.com
+      - servername: actualserver.com
         upstreamserverproto: https
         upstreamserver: google.de
-        sslcert: /tmp/testcert.pem
-        sslkey: /tmp/testkey.key
-      - servername: minimalproxy.example.com
+        sslcert: /etc/testcert.pem
+        sslkey: /etc/testkey.key
+      - servername: minimalproxy.com
         upstreamserver: google.com
   pre_tasks:
     - name: Copy testcerts
@@ -27,7 +27,7 @@
       become: true
       copy:
         src="{{ item.name }}"
-        dest="/tmp/{{ item.name }}"
+        dest="/etc/{{ item.name }}"
         owner=0
         group=0
         mode="{{ item.mode }}"
