@@ -10,12 +10,12 @@
         template: null.j2
       - servername: nullsrvwithkey.example.com
         template: null.j2
-      - servername: actualserver.com
+      - servername: actualserver.example.com
         upstreamserverproto: https
         upstreamserver: google.de
         sslcert: /etc/testcert.pem
         sslkey: /etc/testkey.key
-      - servername: minimalproxy.com
+      - servername: minimalproxy.example.com
         upstreamserver: google.com
   pre_tasks:
     - name: Copy testcerts

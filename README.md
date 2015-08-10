@@ -14,11 +14,12 @@ A role to deploy nginx
 
 * ``nginx_worker_processes``: Amount of nginx worker processes (int, default: ``{{ ansible_processor_vcpus }}``)
 * ``nginx_worker_connections``: Amount of nginx worker connections (int, default: ``768``)
+* ``nginx_server_names_hash_bucket_size``: The nginx server_names_hash_bucket_size directive (int, default: ``64``)
 * ``nginx_user``: Nginx service user (string, default: CentOS 7: ``nginx``, Ubuntu: ``www-data``)
 * ``nginx_template_conf``: Template to use for nginx.conf (string, default: ``builtin_nginx.conf.j2``)
 * ``nginx_ssl_protocols``: SSL protocols to support (string, default: ``TLSv1.1 TLSv1.2``)
 * ``nginx_ssl_cipher_suite``: SSL cipher suites to support (string, default can be found in defaults/main.yml)
-* ``nginx_template_params_tls``: Template to use for tls\_params (string, default: ``builtin_tls_params.j2``)
+* ``nginx_template_params_tls``: Template to use for tls_params (string, default: ``builtin_tls_params.j2``)
 * ``nginx_default_sslcert``: SSL cert to default to if not specified inside vhost (string, default: ``undefined``)
 * ``nginx_default_sslkey``: SSL key to default to if not specified inside vhost (string, default: ``undefined``)
 * ``nginx_ipv6_enable``: Whether to enable ipv6 listening (boolean, default: ``false``)
