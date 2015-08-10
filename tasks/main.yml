@@ -26,7 +26,7 @@
 
 - name: Ensure default vhost is absent
   tags: nginx
-  notify: reload nginx
+  notify: service reload nginx
   become: true
   file:
     state: absent
@@ -34,7 +34,7 @@
 
 - name: Deploy nginx.conf
   tags: nginx
-  notify: restart nginx
+  notify: service restart nginx
   become: true
   template:
     src: "{{ nginx_template_conf|default('builtin_nginx.conf.j2') }}"
@@ -45,7 +45,7 @@
 
 - name: Deploy tls_params
   tags: nginx
-  notify: restart nginx
+  notify: service restart nginx
   become: true
   template:
     src: "{{ nginx_template_params_tls|default('builtin_tls_params.j2') }}"
@@ -56,7 +56,7 @@
 
 - name: Deploy proxy_params
   tags: nginx
-  notify: reload nginx
+  notify: service reload nginx
   become: true
   copy:
     src: proxy_params
