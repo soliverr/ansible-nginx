@@ -1,5 +1,5 @@
 ---
-- name: restart nginx
+- name: service restart nginx
   tags: nginx
   become: true
   service:
