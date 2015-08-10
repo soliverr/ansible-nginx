@@ -1,1 +1,4 @@
+---
 nginx_user_default: nginx
+nginx_required_packages:
+  - nginx

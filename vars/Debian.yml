@@ -1,1 +1,4 @@
+---
 nginx_user_default: www-data
+nginx_required_packages:
+  - nginx
