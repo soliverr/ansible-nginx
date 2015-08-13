@@ -5,6 +5,7 @@
     nginx_default_sslkey: '/etc/wildcard.key'
     nginx_ipv6_enable: true
     util_template_use_cow: false
+    nginx_epel_enabled: true
     nginx_vhosts:
       - servername: nullsrv.example.com
         template: null.j2
@@ -31,5 +32,9 @@
         owner=0
         group=0
         mode="{{ item.mode }}"
+    - name: Install epel
+      when: ansible_distribution == 'CentOS'
+      become: true
+      yum: state=present name=epel-release
   roles:
     - { role: ansible-nginx }
