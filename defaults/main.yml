@@ -6,3 +6,5 @@ nginx_ssl_cipher_suite: 'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA2
 nginx_vhosts: []
 nginx_ipv6_enable: false
 nginx_server_names_hash_bucket_size: 64
+nginx_util_fact_epel_enabled: "{{ ansible_local.util.epel.enabled if ansible_local is defined and ansible_local.util is defined and ansible_local.util.epel is defined and ansible_local.util.epel.enabled is defined else 'false' }}"
+nginx_epel_enabled: "{{ nginx_util_fact_epel_enabled }}"

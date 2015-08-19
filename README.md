@@ -6,12 +6,13 @@ A role to deploy nginx
 
 ## Requirements
 
-* CentOS 7
+* CentOS 7 with epel enabled
 * Ubuntu Trusty
 
 
 ## Role Variables
 
+* ``nginx_epel_enabled``: Wether epel is enabled (boolean, default if available: ``{{ ansible_local.util.epel.enabled }}`` else: ``false``)
 * ``nginx_worker_processes``: Amount of nginx worker processes (int, default: ``{{ ansible_processor_vcpus }}``)
 * ``nginx_worker_connections``: Amount of nginx worker connections (int, default: ``768``)
 * ``nginx_server_names_hash_bucket_size``: The nginx server_names_hash_bucket_size directive (int, default: ``64``)
