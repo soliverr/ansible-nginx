@@ -1,0 +1,40 @@
+---
+- hosts: all
+  vars:
+    nginx_default_sslcert: '/etc/wildcard.pem'
+    nginx_default_sslkey: '/etc/wildcard.key'
+    nginx_ipv6_enable: true
+    util_template_use_cow: false
+    nginx_epel_enabled: true
+    nginx_vhosts:
+      - servername: nullsrv.example.com
+        template: null.j2
+      - servername: nullsrvwithkey.example.com
+        template: null.j2
+      - servername: actualserver.example.com
+        upstreamserverproto: https
+        upstreamserver: google.de
+        sslcert: /etc/testcert.pem
+        sslkey: /etc/testkey.key
+      - servername: minimalproxy.example.com
+        upstreamserver: google.com
+  pre_tasks:
+    - name: Copy testcerts
+      with_items:
+        - { name: 'testcert.pem', mode: '0644' }
+        - { name: 'wildcard.pem', mode: '0644' }
+        - { name: 'testkey.key', mode: '0600' }
+        - { name: 'wildcard.key', mode: '0600' }
+      become: true
+      copy:
+        src="{{ item.name }}"
+        dest="/etc/{{ item.name }}"
+        owner=0
+        group=0
+        mode="{{ item.mode }}"
+    - name: Install epel
+      when: ansible_distribution == 'CentOS'
+      become: true
+      yum: state=present name=epel-release
+  roles:
+    - { role: ansible-nginx }

@@ -1,0 +1,14 @@
+---
+- name: service restart nginx
+  tags: nginx
+  become: true
+  service:
+    state: restarted
+    name: nginx
+
+- name: service reload nginx
+  tags: nginx
+  become: true
+  service:
+    state: reloaded
+    name: nginx

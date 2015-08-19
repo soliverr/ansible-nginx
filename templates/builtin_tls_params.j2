@@ -1,0 +1,21 @@
+{% if util_template_use_cow %}
+#  --------------------
+# ( Managed by Ansible )
+#  --------------------
+#   o            .    .     .
+#    o      .  . .     `  ,
+#     o    .; .  : .' :  :  : .
+#      o   i..`: i` i.i.,i  i .
+#       o   `,--.|i |i|ii|ii|i:
+#            UooU\.'@@@@@@`.||'
+#            \__/(@@@@@@@@@@)'
+#                 (@@@@@@@@)
+#                 `YY~~~~YY'
+#                  ||    ||
+{% else %}
+# {{ ansible_managed }}
+{% endif %}
+
+ssl_protocols {{ nginx_ssl_protocols }};
+ssl_prefer_server_ciphers on;
+ssl_ciphers "{{ nginx_ssl_cipher_suite }}";

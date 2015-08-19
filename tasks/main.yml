@@ -1,0 +1,93 @@
+---
+- name: Assert supported OS
+  tags: nginx
+  assert:
+    that:
+      - ansible_os_family in nginx_supported_platforms
+      - ansible_distribution + '-' + ansible_distribution_major_version in nginx_supported_distributions
+
+
+- name: Include OS familiy specific vars
+  tags: nginx
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Assert epel is enabled
+  tags: nginx
+  when: ansible_os_family == 'RedHat'
+  assert:
+    that: nginx_epel_enabled
+
+- name: Update apt package cache
+  tags: nginx
+  become: true
+  when: ansible_os_family == 'Debian'
+  apt:
+    update_cache: true
+    cache_valid_time: "{{ util_apt_cache_valid_time|default(3600) }}"
+
+- name: Install required packages
+  tags: nginx
+  become: true
+  with_items: nginx_required_packages
+  action: "{{ ansible_pkg_mgr }} state=installed name={{ item }}"
+
+- name: Ensure default vhost is absent
+  tags: nginx
+  notify: service reload nginx
+  become: true
+  file:
+    state: absent
+    path: /etc/nginx/sites-enabled/default
+
+- name: Deploy nginx.conf
+  tags: nginx
+  notify: service restart nginx
+  become: true
+  template:
+    src: "{{ nginx_template_conf|default('builtin_nginx.conf.j2') }}"
+    dest: /etc/nginx/nginx.conf
+    owner: 0
+    group: 0
+    mode: 0644
+
+- name: Deploy tls_params
+  tags: nginx
+  notify: service restart nginx
+  become: true
+  template:
+    src: "{{ nginx_template_params_tls|default('builtin_tls_params.j2') }}"
+    dest: /etc/nginx/tls_params
+    owner: 0
+    group: 0
+    mode: 0644
+
+- name: Deploy proxy_params
+  tags: nginx
+  notify: service reload nginx
+  become: true
+  copy:
+    src: proxy_params
+    dest: /etc/nginx/proxy_params
+    owner: 0
+    group: 0
+    mode: 0644
+
+- name: Deploy vhosts
+  tags: nginx
+  notify: service reload nginx
+  become: true
+  with_items: nginx_vhosts
+  template:
+    src: "{{ item.template|default('builtin_rproxy.conf.j2') }}"
+    dest: /etc/nginx/conf.d/{{ item.servername }}.conf
+    owner: 0
+    group: 0
+    mode: 0644
+
+- name: Ensure nginx service
+  tags: nginx
+  become: true
+  service:
+    state: started
+    name: nginx
+    enabled: yes

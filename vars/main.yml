@@ -1,0 +1,8 @@
+---
+nginx_supported_platforms:
+  - Debian
+  - RedHat
+
+nginx_supported_distributions:
+  - CentOS-7
+  - Ubuntu-14
