@@ -20,6 +20,8 @@ A role to deploy nginx
 * ``nginx_template_conf``: Template to use for nginx.conf (string, default: ``builtin_nginx.conf.j2``)
 * ``nginx_ssl_protocols``: SSL protocols to support (string, default: ``TLSv1.1 TLSv1.2``)
 * ``nginx_ssl_cipher_suite``: SSL cipher suites to support (string, default can be found in defaults/main.yml)
+* ``nginx_sslcert_basepath``: The basepath for all sslcerts, will only be used if defined (string, default: ``undefined``)
+* ``nginx_sslkey_basepath``: The basepath for all sslkeys, will only be used if defined (string, default: ``undefined``)
 * ``nginx_template_params_tls``: Template to use for tls_params (string, default: ``builtin_tls_params.j2``)
 * ``nginx_default_sslcert``: SSL cert to default to if not specified inside vhost (string, default: ``undefined``)
 * ``nginx_default_sslkey``: SSL key to default to if not specified inside vhost (string, default: ``undefined``)

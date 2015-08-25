@@ -34,8 +34,8 @@ server {
 {% if nginx_ipv6_enable %}
   listen [::]:{{ item.http_port|default('443')}} ssl;
 {% endif %}
-  ssl_certificate {{ item.sslcert|default(nginx_default_sslcert) }};
-  ssl_certificate_key {{ item.sslkey|default(nginx_default_sslkey) }};
+  ssl_certificate {{ nginx_sslcert_basepath + '/' if nginx_sslcert_basepath is defined else '' }}{{ item.sslcert|default(nginx_default_sslcert) }};
+  ssl_certificate_key {{ nginx_sslkey_basepath + '/' if nginx_sslkey_basepath is defined else '' }}{{ item.sslkey|default(nginx_default_sslkey) }};
 
   server_name {{ item.servername }};
   client_max_body_size {{ item.maxbodysize|default('10m') }};
