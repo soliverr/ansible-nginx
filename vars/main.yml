@@ -5,4 +5,5 @@ nginx_supported_platforms:
 
 nginx_supported_distributions:
   - CentOS-7
+  - RedHat
   - Ubuntu-14
