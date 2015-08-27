@@ -1,3 +1,9 @@
+# 1.1.1
+
+Mark Kusch (1):
+
+* Really support RHEL-7
+
 # 1.1.0
 
 Alvaro Aleman (1):
