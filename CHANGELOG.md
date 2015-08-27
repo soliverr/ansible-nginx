@@ -1,4 +1,14 @@
-# 0.1
+# 1.1.0
+
+Alvaro Aleman (1):
+
+* Fixed ansible-util epel fact name
+
+Mark Kusch (1):
+
+* Allow role to run on RHEL-7
+
+# 1.0.0
 
 Alvaro Aleman (16):
 
