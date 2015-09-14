@@ -41,6 +41,9 @@ server {
   client_max_body_size {{ item.maxbodysize|default('10m') }};
 
   location / {
+{% if item.htpasswd is defined %}
+    include /etc/nginx/{{ item.servername}}.htpasswd
+{% endif %}
     include /etc/nginx/proxy_params;
     proxy_pass {{ item.upstreamserverproto|default('http') }}://{{ item.upstreamserver }};
   }
