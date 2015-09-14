@@ -84,6 +84,18 @@
     group: 0
     mode: 0644
 
+- name: Deploy htpasswd
+  tags: nginx
+  with_subelements:
+    - "{{ nginx_vhosts |selectattr('htpasswd', 'defined')|list }}"
+    - htpasswd
+  become: true
+  htpasswd:
+    state: present
+    path: "/etc/nginx/conf.d/{{ item.0.servername}}.htpasswd"
+    name: "{{ item.1.name }}"
+    password: "{{ item.1.password }}"
+
 - name: Ensure nginx service
   tags: nginx
   become: true
