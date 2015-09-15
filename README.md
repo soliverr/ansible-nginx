@@ -56,6 +56,9 @@ Below is a sample ``nginx_vhosts`` with all possible options.
         http_port: 9000                         # default: 80
         maxbodysize: 0                          # default: 10m
         upstreamserverproto: https              # default: http
+        htpasswd:                               # If omitted, htpasswd wont get configured
+          - name: mybasicauthuser
+            password: strongpass
 
 ## Example Playbook
 
