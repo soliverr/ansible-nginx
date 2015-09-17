@@ -87,7 +87,7 @@
 - name: Deploy htpasswd
   tags: nginx
   with_subelements:
-    - "{{ nginx_vhosts |selectattr('htpasswd', 'defined')|list }}"
+    - "{{ nginx_vhosts|selectattr('htpasswd', 'defined')|list }}"
     - htpasswd
   become: true
   htpasswd:
