@@ -18,6 +18,9 @@
         sslkey: /etc/testkey.key
       - servername: minimalproxy.example.com
         upstreamserver: google.com
+        htpasswd:
+          - name: ich
+            password: root
   pre_tasks:
     - name: Copy testcerts
       with_items:

@@ -41,6 +41,10 @@ server {
   client_max_body_size {{ item.maxbodysize|default('10m') }};
 
   location / {
+{% if item.htpasswd is defined %}
+    auth_basic "Credentials required:";
+    auth_basic_user_file /etc/nginx/conf.d/{{ item.servername}}.htpasswd;
+{% endif %}
     include /etc/nginx/proxy_params;
     proxy_pass {{ item.upstreamserverproto|default('http') }}://{{ item.upstreamserver }};
   }
