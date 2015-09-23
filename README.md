@@ -15,6 +15,7 @@ A role to deploy nginx
 * ``nginx_epel_enabled``: Wether epel is enabled (boolean, default if available: ``{{ ansible_local.util.epel.enabled }}`` else: ``false``)
 * ``nginx_worker_processes``: Amount of nginx worker processes (int, default: ``{{ ansible_processor_vcpus }}``)
 * ``nginx_worker_connections``: Amount of nginx worker connections (int, default: ``768``)
+* ``nginx_keepalive_timeout``: Sets a timeout during which a keep-alive client connection will stay open on the server side.  (int, default: ``65``)
 * ``nginx_server_names_hash_bucket_size``: The nginx server_names_hash_bucket_size directive (int, default: ``64``)
 * ``nginx_user``: Nginx service user (string, default: CentOS 7: ``nginx``, Ubuntu: ``www-data``)
 * ``nginx_template_conf``: Template to use for nginx.conf (string, default: ``builtin_nginx.conf.j2``)
@@ -55,6 +56,7 @@ Below is a sample ``nginx_vhosts`` with all possible options.
         https_port: 90001                       # default: 443
         http_port: 9000                         # default: 80
         maxbodysize: 0                          # default: 10m
+        proxy_read_timeout: 300s                # default: 60s
         upstreamserverproto: https              # default: http
         htpasswd:                               # If omitted, htpasswd wont get configured
           - name: mybasicauthuser
