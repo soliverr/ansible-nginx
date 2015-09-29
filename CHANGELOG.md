@@ -1,3 +1,22 @@
+# 1.2.0
+
+Alvaro Aleman (9):
+
+* added nginx_ssl{cert,key}_basepath vars
+* Add deploy htpasswd task
+* Fix builtin_rproxy template to include htpasswd
+* Add python-passlib dependency as it is needed for htpasswd
+* Add port forwarding to Vagrantfile
+* Fix htpasswd config in builtin_rproxy template
+* Add a test for basic auth
+* Update readme to include htpasswd description
+* Fix code style
+
+Ruslan Tumarkin (2):
+
+* Add default variable keepalive_timeout
+* Add proxy_read_timeout and fix https_port in proxy template
+
 # 1.1.1
 
 Mark Kusch (1):
