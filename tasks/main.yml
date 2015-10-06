@@ -96,6 +96,17 @@
     name: "{{ item.1.name }}"
     password: "{{ item.1.password }}"
 
+# The purpose of this is to detect configuration errors when the service nginx reload handler
+# is triggered.
+# This is important because the reload handler never fails if the service was already up, the NginX
+# service just keeps running with the old config. We don't want such behaviour, we want the role to fail
+# if a faulty configuration was deployed
+- name: Check config
+  tags: nginx
+  changed_when: false
+  become: true
+  command: 'nginx -t'
+
 - name: Ensure nginx service
   tags: nginx
   become: true
