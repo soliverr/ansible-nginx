@@ -1,3 +1,9 @@
+# 1.3.0
+
+Alvaro Aleman (1):
+
+* Ensure a faulty config causes the role to fail
+
 # 1.2.0
 
 Alvaro Aleman (9):
