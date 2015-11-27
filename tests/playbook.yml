@@ -4,7 +4,6 @@
     nginx_default_sslcert: '/etc/wildcard.pem'
     nginx_default_sslkey: '/etc/wildcard.key'
     nginx_ipv6_enable: true
-    util_template_use_cow: false
     nginx_epel_enabled: true
     nginx_vhosts:
       - servername: nullsrv.example.com

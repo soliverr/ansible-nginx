@@ -9,3 +9,4 @@ nginx_ipv6_enable: false
 nginx_server_names_hash_bucket_size: 64
 nginx_util_fact_epel_enabled: "{{ ansible_local.util.epel.enable if ansible_local is defined and ansible_local.util is defined and ansible_local.util.epel is defined and ansible_local.util.epel.enable is defined else 'false' }}"
 nginx_epel_enabled: "{{ nginx_util_fact_epel_enabled }}"
+nginx_template_use_cow: "{{ util_template_use_cow|default(true) }}"
