@@ -16,9 +16,6 @@ Vagrant.configure(VAGRANT_API_VERSION) do |config|
     d.vm.hostname = 'ansiblenginxtest'
     d.vm.synced_folder '.', '/vagrant', id: 'vagrant-root', disabled: true
 
-    d.vm.network "forwarded_port", guest: 80, host: 8080
-    d.vm.network "forwarded_port", guest: 443, host: 8443
-
     d.vm.provision :ansible do |ansible|
       ansible.playbook = 'tests/playbook.yml'
       ansible.tags = ENV['ANSIBLE_NGINX_VAGRANT_ANSIBLE_TAGS']
@@ -31,6 +28,12 @@ Vagrant.configure(VAGRANT_API_VERSION) do |config|
         'vagrant' => ['ansiblenginxtest']
       }
       ansible.limit = 'vagrant'
+      ansible.raw_arguments = [
+        '--diff'
+      ]
+      if ENV['ANSIBLE_NGINX_VAGRANT_ANSIBLE_CHECKMODE'] == '1'
+        ansible.raw_arguments << '--check'
+      end
 
       ::File.directory?('.vagrant/provisioners/ansible/inventory/') do
         ansible.inventory_path = '.vagrant/provisioners/ansible/inventory/'
