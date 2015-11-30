@@ -96,6 +96,17 @@
     name: "{{ item.1.name }}"
     password: "{{ item.1.password }}"
 
+- name: Set httpd_can_network_connect
+  tags: nginx
+  become: true
+  when:
+    - ansible_selinux != false
+    - nginx_httpd_can_network_connect
+  seboolean:
+    state: true
+    persistent: true
+    name: httpd_can_network_connect
+
 # The purpose of this is to detect configuration errors when the service nginx reload handler
 # is triggered.
 # This is important because the reload handler never fails if the service was already up, the NginX
