@@ -3,3 +3,4 @@ nginx_user_default: nginx
 nginx_required_packages:
   - nginx
   - python-passlib
+  - libsemanage-python # Required for the seboolean module
