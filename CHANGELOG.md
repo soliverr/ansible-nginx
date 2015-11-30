@@ -1,3 +1,15 @@
+# 1.4.0
+
+Alvaro Aleman (2):
+
+* s/util\_template\_use\_cow/nginx\_template\_use\_cow/g
+* Enable the httpd\_can\_network\_connect sebool by default
+
+Mark Kusch (2):
+
+* Make SELinux detection a litte more reliable
+* Re-run ansible-generator
+
 # 1.3.0
 
 Alvaro Aleman (1):

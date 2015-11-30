@@ -7,3 +7,5 @@ nginx_supported_distributions:
   - CentOS-7
   - RedHat-7
   - Ubuntu-14
+
+nginx_role_version: "{{ lookup('file', role_path + '/VERSION') }}"
