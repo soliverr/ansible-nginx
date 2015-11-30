@@ -100,7 +100,7 @@
   tags: nginx
   become: true
   when:
-    - ansible_selinux
+    - ansible_selinux != false
     - nginx_httpd_can_network_connect
   seboolean:
     state: true
