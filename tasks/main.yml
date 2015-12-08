@@ -96,11 +96,21 @@
     name: "{{ item.1.name }}"
     password: "{{ item.1.password }}"
 
+- name: Register SELinux state
+  tags: nginx
+  become: true
+  always_run: true
+  ignore_errors: true
+  failed_when: false
+  changed_when: false
+  register: nginx_registered_selinux_state
+  command: selinuxenabled
+
 - name: Set httpd_can_network_connect
   tags: nginx
   become: true
   when:
-    - ansible_selinux != false
+    - nginx_registered_selinux_state.rc == 0
     - nginx_httpd_can_network_connect
   seboolean:
     state: true
