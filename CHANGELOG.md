@@ -1,3 +1,9 @@
+# 1.4.1
+
+Alvaro Aleman (1):
+
+* Use selinuxenabled command for selinux state detection
+
 # 1.4.0
 
 Alvaro Aleman (2):
