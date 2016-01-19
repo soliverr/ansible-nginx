@@ -14,6 +14,7 @@
       - servername: actualserver.example.com
         upstreamserverproto: https
         upstreamserver: google.de
+        upstreamport: 8080
         sslcert: /etc/testcert.pem
         sslkey: /etc/testkey.key
       - servername: minimalproxy.example.com

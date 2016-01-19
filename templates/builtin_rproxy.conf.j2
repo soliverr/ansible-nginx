@@ -53,7 +53,12 @@ server {
     proxy_read_timeout {{ item.proxy_read_timeout }};
 {% endif %}
     include /etc/nginx/proxy_params;
+    {% if item.upstreamport is defined %}
+    proxy_pass {{ item.upstreamserverproto|default('http') }}://{{ item.upstreamserver }}:{{ item.upstreamport }};
+    {% else %}
     proxy_pass {{ item.upstreamserverproto|default('http') }}://{{ item.upstreamserver }};
+    {% endif %}
+
   }
 
     {% endif %}

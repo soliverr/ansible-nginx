@@ -62,6 +62,7 @@ Below is a sample ``nginx_vhosts`` with all possible options.
         maxbodysize: 0                          # default: 10m
         proxy_read_timeout: 300s                # default: 60s
         upstreamserverproto: https              # default: http
+        upstreamport: 8080                      # default: omitted 
         htpasswd:                               # If omitted, htpasswd wont get configured
           - name: mybasicauthuser
             password: strongpass
