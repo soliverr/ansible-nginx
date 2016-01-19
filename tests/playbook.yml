@@ -12,6 +12,7 @@
       - servername: nullsrvwithkey.example.com
         upstreamserver: google.de
       - servername: actualserver.example.com
+        server_aliases: ["www.actualserver.example.com"]
         upstreamserverproto: https
         upstreamserver: google.de
         upstreamport: 8080

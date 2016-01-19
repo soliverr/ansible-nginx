@@ -53,18 +53,19 @@ Below is a sample ``nginx_vhosts`` with all possible options.
 
     nginx_vhosts:
       - servername: reverseproxy.example.com
-        upstreamserver: backend.example.com:80  # The port may be left empty (mandatory)
-        sslcert: /etc/pki/tls/certs/my.crt      # default: nginx_default_sslcert
-        sslkey:  /etc/pki/tls/private/my.key    # default: nginx_default_sslkey
-        https_port: 90001                       # default: 443
-        http_port: 9000                         # default: 80
-        ssl: false                              # default: nginx_ssl_enable
-        maxbodysize: 0                          # default: 10m
-        proxy_read_timeout: 300s                # default: 60s
-        upstreamserverproto: https              # default: http
-        upstreamport: 8080                      # default: omitted 
-        default_server: true                    # default: omitted 
-        htpasswd:                               # If omitted, htpasswd wont get configured
+        server_aliases: ["www.reverseproxy.example.com"]    # default: omitted
+        upstreamserver: backend.example.com                 # (mandatory)
+        sslcert: /etc/pki/tls/certs/my.crt                  # default: nginx_default_sslcert
+        sslkey:  /etc/pki/tls/private/my.key                # default: nginx_default_sslkey
+        https_port: 90001                                   # default: 443
+        http_port: 9000                                     # default: 80
+        ssl: false                                          # default: nginx_ssl_enable
+        maxbodysize: 0                                      # default: 10m
+        proxy_read_timeout: 300s                            # default: 60s
+        upstreamserverproto: https                          # default: http
+        upstreamport: 8080                                  # default: omitted 
+        default_server: true                                # default: omitted 
+        htpasswd:                                           # If omitted, htpasswd wont get configured
           - name: mybasicauthuser
             password: strongpass
 
