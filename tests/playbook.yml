@@ -4,18 +4,25 @@
     nginx_default_sslcert: '/etc/wildcard.pem'
     nginx_default_sslkey: '/etc/wildcard.key'
     nginx_ipv6_enable: true
+    nginx_ssl_enable: false
     nginx_epel_enabled: true
     nginx_vhosts:
       - servername: nullsrv.example.com
         template: null.j2
       - servername: nullsrvwithkey.example.com
-        template: null.j2
+        upstreamserver: google.de
       - servername: actualserver.example.com
         upstreamserverproto: https
         upstreamserver: google.de
         sslcert: /etc/testcert.pem
         sslkey: /etc/testkey.key
       - servername: minimalproxy.example.com
+        upstreamserver: google.com
+        ssl: true
+        htpasswd:
+          - name: ich
+            password: root
+      - servername: minimalproxyii.example.com
         upstreamserver: google.com
         htpasswd:
           - name: ich
