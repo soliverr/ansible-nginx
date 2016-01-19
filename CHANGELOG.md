@@ -1,3 +1,13 @@
+# 2.0.0
+
+Anja Siek (6):
+
+* add ssl true/false configuration
+* add variable to configure upstreamport
+* add local facts
+* add optional server\_aliases for server configuration
+* add option default\_server
+
 # 1.4.1
 
 Alvaro Aleman (1):

@@ -15,29 +15,33 @@
 {% else %}
 # {{ ansible_managed }}
 {% endif %}
+{% macro get_server_config(ssl, https) -%}
 
 server {
-  listen {{ item.http_port|default('80')}};
+{% if https %}
+  listen {{ item.https_port|default('443')}} ssl{% if item.default_server is defined %} default_server {%- endif %};
+{% else %}
+  listen {{ item.http_port|default('80')}}{% if item.default_server is defined %} default_server {%- endif %};
+{% endif %}
 {% if nginx_ipv6_enable %}
+{% if https %}
+  listen [::]:{{ item.https_port|default('443')}} ssl;
+{% else %}
   listen [::]:{{ item.http_port|default('80')}};
 {% endif %}
-
-  server_name {{ item.servername }};
-  return 302 https://$host$request_uri;
-
-  error_log /var/log/nginx/{{ item.servername }}-error.log;
-  access_log /var/log/nginx/{{ item.servername }}-access.log;
-}
-
-server {
-  listen {{ item.https_port|default('443')}} ssl;
-{% if nginx_ipv6_enable %}
-  listen [::]:{{ item.https_port|default('443')}} ssl;
 {% endif %}
+
+{% if https %}
   ssl_certificate {{ nginx_sslcert_basepath + '/' if nginx_sslcert_basepath is defined else '' }}{{ item.sslcert|default(nginx_default_sslcert) }};
   ssl_certificate_key {{ nginx_sslkey_basepath + '/' if nginx_sslkey_basepath is defined else '' }}{{ item.sslkey|default(nginx_default_sslkey) }};
+{% endif %}
 
-  server_name {{ item.servername }};
+  server_name {{ item.servername }}{% if item.server_aliases is defined %} {{ item.server_aliases|join(' ') }}{% endif %};
+{% if not https and ssl %}
+  return 302 https://$host$request_uri;
+{% else %}
+{% if not ssl or https %}
+
   client_max_body_size {{ item.maxbodysize|default('10m') }};
 
   location / {
@@ -49,9 +53,24 @@ server {
     proxy_read_timeout {{ item.proxy_read_timeout }};
 {% endif %}
     include /etc/nginx/proxy_params;
+    {% if item.upstreamport is defined %}
+    proxy_pass {{ item.upstreamserverproto|default('http') }}://{{ item.upstreamserver }}:{{ item.upstreamport }};
+    {% else %}
     proxy_pass {{ item.upstreamserverproto|default('http') }}://{{ item.upstreamserver }};
+    {% endif %}
+
   }
+
+    {% endif %}
+  {% endif %}
 
   error_log /var/log/nginx/{{ item.servername }}-error.log;
   access_log /var/log/nginx/{{ item.servername }}-access.log;
 }
+{% endmacro %}
+
+{{ get_server_config(item.ssl|default(nginx_ssl_enable),false) }}
+
+{% if item.ssl|default(nginx_ssl_enable) %}
+{{ get_server_config(item.ssl|default(nginx_ssl_enable),true) }}
+{% endif %}

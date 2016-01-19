@@ -19,6 +19,7 @@ A role to deploy nginx
 * ``nginx_server_names_hash_bucket_size``: The nginx server_names_hash_bucket_size directive (int, default: ``64``)
 * ``nginx_user``: Nginx service user (string, default: CentOS 7: ``nginx``, Ubuntu: ``www-data``)
 * ``nginx_template_conf``: Template to use for nginx.conf (string, default: ``builtin_nginx.conf.j2``)
+* ``nginx_ssl_enable``: Default enable ssl configuration (boolean, default: ``true``)
 * ``nginx_ssl_protocols``: SSL protocols to support (string, default: ``TLSv1.1 TLSv1.2``)
 * ``nginx_ssl_cipher_suite``: SSL cipher suites to support (string, default can be found in defaults/main.yml)
 * ``nginx_sslcert_basepath``: The basepath for all sslcerts, will only be used if defined (string, default: ``undefined``)
@@ -52,15 +53,19 @@ Below is a sample ``nginx_vhosts`` with all possible options.
 
     nginx_vhosts:
       - servername: reverseproxy.example.com
-        upstreamserver: backend.example.com:80  # The port may be left empty (mandatory)
-        sslcert: /etc/pki/tls/certs/my.crt      # default: nginx_default_sslcert
-        sslkey:  /etc/pki/tls/private/my.key    # default: nginx_default_sslkey
-        https_port: 90001                       # default: 443
-        http_port: 9000                         # default: 80
-        maxbodysize: 0                          # default: 10m
-        proxy_read_timeout: 300s                # default: 60s
-        upstreamserverproto: https              # default: http
-        htpasswd:                               # If omitted, htpasswd wont get configured
+        server_aliases: ["www.reverseproxy.example.com"]    # default: omitted
+        upstreamserver: backend.example.com                 # (mandatory)
+        sslcert: /etc/pki/tls/certs/my.crt                  # default: nginx_default_sslcert
+        sslkey:  /etc/pki/tls/private/my.key                # default: nginx_default_sslkey
+        https_port: 90001                                   # default: 443
+        http_port: 9000                                     # default: 80
+        ssl: false                                          # default: nginx_ssl_enable
+        maxbodysize: 0                                      # default: 10m
+        proxy_read_timeout: 300s                            # default: 60s
+        upstreamserverproto: https                          # default: http
+        upstreamport: 8080                                  # default: omitted 
+        default_server: true                                # default: omitted 
+        htpasswd:                                           # If omitted, htpasswd wont get configured
           - name: mybasicauthuser
             password: strongpass
 
