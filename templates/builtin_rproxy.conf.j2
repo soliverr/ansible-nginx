@@ -36,7 +36,7 @@ server {
   ssl_certificate_key {{ nginx_sslkey_basepath + '/' if nginx_sslkey_basepath is defined else '' }}{{ item.sslkey|default(nginx_default_sslkey) }};
 {% endif %}
 
-  server_name {{ item.servername }};
+  server_name {{ item.servername }}{% if item.server_aliases is defined %} {{ item.server_aliases|join(' ') }}{% endif %};
 {% if not https and ssl %}
   return 302 https://$host$request_uri;
 {% else %}
