@@ -11,6 +11,31 @@
   tags: nginx
   include_vars: "{{ ansible_os_family }}.yml"
 
+- name: Install Ansible facts.d directory
+  tags: nginx
+  become: yes
+  file:
+    state: directory
+    dest: /etc/ansible/facts.d
+    owner: 0
+    group: 0
+    mode: 0755
+
+- name: Install nginx facts
+  tags: nginx
+  become: true
+  template:
+    src: facts.j2
+    dest: /etc/ansible/facts.d/nginx.fact
+    owner: 0
+    group: 0
+    mode: 0644
+
+- name: Re-read local facts
+  tags: nginx
+  setup:
+    filter: ansible_local
+
 - name: Assert epel is enabled
   tags: nginx
   when: ansible_os_family == 'RedHat'
