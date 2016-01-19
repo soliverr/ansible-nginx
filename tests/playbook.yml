@@ -20,6 +20,7 @@
       - servername: minimalproxy.example.com
         upstreamserver: google.com
         ssl: true
+        default_server: true
         htpasswd:
           - name: ich
             password: root

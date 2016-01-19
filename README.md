@@ -63,6 +63,7 @@ Below is a sample ``nginx_vhosts`` with all possible options.
         proxy_read_timeout: 300s                # default: 60s
         upstreamserverproto: https              # default: http
         upstreamport: 8080                      # default: omitted 
+        default_server: true                    # default: omitted 
         htpasswd:                               # If omitted, htpasswd wont get configured
           - name: mybasicauthuser
             password: strongpass

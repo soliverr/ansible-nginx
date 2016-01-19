@@ -19,9 +19,9 @@
 
 server {
 {% if https %}
-  listen {{ item.https_port|default('443')}} ssl;
+  listen {{ item.https_port|default('443')}} ssl{% if item.default_server is defined %} default_server {%- endif %};
 {% else %}
-  listen {{ item.http_port|default('80')}};
+  listen {{ item.http_port|default('80')}}{% if item.default_server is defined %} default_server {%- endif %};
 {% endif %}
 {% if nginx_ipv6_enable %}
 {% if https %}
