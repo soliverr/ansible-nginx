@@ -13,7 +13,7 @@
 
 - name: Install Ansible facts.d directory
   tags: nginx
-  become: yes
+  become: true
   file:
     state: directory
     dest: /etc/ansible/facts.d
