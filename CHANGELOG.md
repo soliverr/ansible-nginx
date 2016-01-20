@@ -1,3 +1,10 @@
+# 2.0.1
+
+
+* Add Ansible version dependency info
+* Add support for websockets
+
+Alvaro Aleman (2):
 # 2.0.0
 
 Anja Siek (6):
