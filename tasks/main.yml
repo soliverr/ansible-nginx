@@ -160,3 +160,11 @@
     state: started
     name: nginx
     enabled: yes
+
+- name: Notify reload nginx when tlscert_changed
+  tags: nginx
+  changed_when: false
+  notify: service reload nginx
+  when: tlscert_changed|default(false)
+  debug:
+    msg: "{{ tlscert_changed|default(false) }}"
