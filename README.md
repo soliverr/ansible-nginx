@@ -58,7 +58,7 @@ you can just use your own template. Also, information about ssl certificates and
 * ``nginx_template_params_tls``: Template to use for tls_params (string, default: ``builtin_tls_params.j2``)
 * ``nginx_default_sslcert``: SSL cert to default to if not specified inside vhost (string, default: ``undefined``)
 * ``nginx_default_sslkey``: SSL key to default to if not specified inside vhost (string, default: ``undefined``)
-* ``nginx_ipv6_enable``: Whether to enable ipv6 listening (boolean, default: ``false``)
+* ``nginx_ipv6_enable``: Whether to enable ipv6 listening (boolean, default: ``true``)
 * ``nginx_vhosts``: Dictionary to configure nginx virtual hosts (dict, default: ``[]``)
 * ``nginx_template_use_cow``: Whether to use Ansible cow instead of ``{{ ansible_managed}}`` as header in templates (string, default: ``util_template_use_cow|default(true)`` )
 * ``nginx_httpd_can_network_connect``: Wheter to enable the ``httpd_can_network_connect`` SEBoolean (bool, default: ``true``)
