@@ -32,8 +32,8 @@ server {
 {% endif %}
 
 {% if https %}
-  ssl_certificate {{ nginx_sslcert_basepath + '/' if nginx_sslcert_basepath is defined else '' }}{{ item.sslcert|default(nginx_default_sslcert) }};
-  ssl_certificate_key {{ nginx_sslkey_basepath + '/' if nginx_sslkey_basepath is defined else '' }}{{ item.sslkey|default(nginx_default_sslkey) }};
+  ssl_certificate  {{ nginx_cur_sslcrt }};
+  ssl_certificate_key {{ nginx_cur_sslkey }};
 {% endif %}
 
   server_name {{ item.servername }}{% if item.server_aliases is defined %} {{ item.server_aliases|join(' ') }}{% endif %};
