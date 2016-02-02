@@ -1,12 +1,19 @@
 ---
 - hosts: all
   vars:
+    tlscert_create:
+      - mydomain.com
+      - mydomain.org
     nginx_default_sslcert: '/etc/wildcard.pem'
     nginx_default_sslkey: '/etc/wildcard.key'
     nginx_ipv6_enable: true
     nginx_ssl_enable: false
     nginx_epel_enabled: true
     nginx_vhosts:
+      - servername: mydomain.com
+        upstreamserver: google.com
+      - servername: mydomain.org
+        upstreamserver: google.com
       - servername: nullsrv.example.com
         template: null.j2
       - servername: nullsrvwithkey.example.com
@@ -48,5 +55,11 @@
       when: ansible_distribution == 'CentOS'
       become: true
       yum: state=present name=epel-release
+    - name: Create /etc/facts.d
+      become: true
+      file:
+        state: directory
+        path: /etc/ansible/facts.d
   roles:
-    - { role: ansible-nginx }
+    - ansible-tlscert
+    - ansible-nginx
