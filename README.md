@@ -1,12 +1,43 @@
 # ansible-nginx
 
-## Description
-
 A role to deploy nginx
+
+# Synopsis
+
+```yaml
+- name: Install a reverse proxy using a self-signed SSL certificate
+  hosts: all
+  vars:
+    tlscert_create:
+      - mydomain.com
+    nginx_vhosts:
+      - servername: mydomain.com
+        upstreamserver: mybackend.com
+        upstreamserverproto: http
+        upstreamserverport: 8080
+  roles:
+    - ansible-tlscert
+    - ansible-nginx
+```
+
+```yaml
+- name: Install a webserver using a custom template
+  hosts: all
+  vars:
+    nginx_vhosts:
+      - servername: filer.mydomain.com
+        template: filertemplate.j2
+```
+
+# Description
+
+This role installs and configures a NginX webserver. It provides built-in templates that are configurable or
+you can just use your own template. Also, information about ssl certificates and keys provided by the
+``ansible-tlscert`` role is used if available.
 
 ## Requirements
 
-* CentOS 7 with epel enabled
+* CentOS 7 with Epel enabled
 * Ubuntu Trusty
 
 
@@ -38,10 +69,12 @@ This role allows to deploy vhosts using the ``nginx_vhosts`` list variable.
 
 There are two approaches to this. The first one is to pass a templates to the role:
 
-    nginx_vhosts:
-      - servername: myveryownhost.example.com
-        template: mytemplate.j2
-        myowntemplatevariable: True
+```yaml
+nginx_vhosts:
+  - servername: myveryownhost.example.com
+    template: mytemplate.j2
+    myowntemplatevariable: True
+```
 
 The above specified ``myowntemplatevariable`` is not mandatory. It may be accessed
 from the template by using ``{{ item.myowntemplatevariable }}``.
@@ -51,29 +84,33 @@ a standard reverse proxy with a HTTP 302 redirect to HTTPS for all HTTP requests
 
 Below is a sample ``nginx_vhosts`` with all possible options.
 
-    nginx_vhosts:
-      - servername: reverseproxy.example.com
-        server_aliases: ["www.reverseproxy.example.com"]    # default: omitted
-        upstreamserver: backend.example.com                 # (mandatory)
-        sslcert: /etc/pki/tls/certs/my.crt                  # default: nginx_default_sslcert
-        sslkey:  /etc/pki/tls/private/my.key                # default: nginx_default_sslkey
-        https_port: 90001                                   # default: 443
-        http_port: 9000                                     # default: 80
-        ssl: false                                          # default: nginx_ssl_enable
-        maxbodysize: 0                                      # default: 10m
-        proxy_read_timeout: 300s                            # default: 60s
-        upstreamserverproto: https                          # default: http
-        upstreamport: 8080                                  # default: omitted 
-        default_server: true                                # default: omitted 
-        htpasswd:                                           # If omitted, htpasswd wont get configured
-          - name: mybasicauthuser
-            password: strongpass
+```yaml
+nginx_vhosts:
+  - servername: reverseproxy.example.com
+    server_aliases: ["www.reverseproxy.example.com"]    # default: omitted
+    upstreamserver: backend.example.com                 # (mandatory)
+    sslcert: /etc/pki/tls/certs/my.crt                  # default: ansible_local['tlscert']['certs'][item['servername']]['crt']|default(nginx_default_sslcert)
+    sslkey:  /etc/pki/tls/private/my.key                # default: ansible_local['tlscert']['certs'][item['servername']]['key']|default(nginx_default_sslkey)
+    https_port: 90001                                   # default: 443
+    http_port: 9000                                     # default: 80
+    ssl: false                                          # default: nginx_ssl_enable
+    maxbodysize: 0                                      # default: 10m
+    proxy_read_timeout: 300s                            # default: 60s
+    upstreamserverproto: https                          # default: http
+    upstreamport: 8080                                  # default: omitted
+    default_server: true                                # default: omitted
+    htpasswd:                                           # If omitted, htpasswd wont get configured
+      - name: mybasicauthuser
+        password: strongpass
+```
 
 ## Example Playbook
 
-    - hosts: all
-      roles:
-         - { role: ansible-nginx }
+```yaml
+- hosts: all
+  roles:
+     - ansible-nginx
+```
 
 ## Contributing
 
