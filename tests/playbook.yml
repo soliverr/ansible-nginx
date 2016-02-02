@@ -1,39 +1,14 @@
 ---
 - hosts: all
   vars:
-    tlscert_create:
-      - mydomain.com
-      - mydomain.org
     nginx_default_sslcert: '/etc/wildcard.pem'
     nginx_default_sslkey: '/etc/wildcard.key'
-    nginx_ipv6_enable: true
-    nginx_ssl_enable: false
     nginx_epel_enabled: true
     nginx_vhosts:
-      - servername: mydomain.com
-        upstreamserver: google.com
-      - servername: mydomain.org
-        upstreamserver: google.com
-      - servername: nullsrv.example.com
-        template: null.j2
-      - servername: nullsrvwithkey.example.com
-        upstreamserver: google.de
-      - servername: actualserver.example.com
-        server_aliases: ["www.actualserver.example.com"]
-        upstreamserverproto: https
-        upstreamserver: google.de
-        upstreamport: 8080
-        sslcert: /etc/testcert.pem
-        sslkey: /etc/testkey.key
       - servername: minimalproxy.example.com
         upstreamserver: google.com
         ssl: true
         default_server: true
-        htpasswd:
-          - name: ich
-            password: root
-      - servername: minimalproxyii.example.com
-        upstreamserver: google.com
         htpasswd:
           - name: ich
             password: root
@@ -60,6 +35,38 @@
       file:
         state: directory
         path: /etc/ansible/facts.d
+  roles:
+    - ansible-nginx
+
+
+- hosts: all
+  vars:
+    tlscert_create:
+      - mydomain.com
+      - mydomain.org
+    nginx_ssl_enable: false
+    nginx_epel_enabled: true
+    nginx_vhosts:
+      - servername: mydomain.com
+        upstreamserver: google.com
+      - servername: mydomain.org
+        upstreamserver: google.com
+      - servername: nullsrv.example.com
+        template: null.j2
+      - servername: nullsrvwithkey.example.com
+        upstreamserver: google.de
+      - servername: actualserver.example.com
+        server_aliases: ["www.actualserver.example.com"]
+        upstreamserverproto: https
+        upstreamserver: google.de
+        upstreamport: 8080
+        sslcert: /etc/testcert.pem
+        sslkey: /etc/testkey.key
+      - servername: minimalproxyii.example.com
+        upstreamserver: google.com
+        htpasswd:
+          - name: ich
+            password: root
   roles:
     - ansible-tlscert
     - ansible-nginx
