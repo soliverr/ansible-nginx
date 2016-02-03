@@ -70,3 +70,11 @@
   roles:
     - ansible-tlscert
     - ansible-nginx
+
+- hosts: all
+  vars:    
+      nginx_config_only: true
+      nging_config_basepath: /tmp/nginxConfig
+      nginx_config_only_become: false
+  roles:
+    - ansible-nginx
