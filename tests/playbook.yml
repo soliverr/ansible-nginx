@@ -71,10 +71,14 @@
     - ansible-tlscert
     - ansible-nginx
 
+# This must be in a seperate play, else the handlers get executed because
+# nginx_config_only was true the first time they got notified
+# which may be irritating
 - hosts: all
-  vars:    
+  roles:
+    - role: ansible-nginx
       nginx_config_only: true
-      nging_config_basepath: /tmp/nginxConfig
+      nginx_config_basepath: /tmp/nginxConfig
       nginx_config_only_become: false
   roles:
     - ansible-nginx

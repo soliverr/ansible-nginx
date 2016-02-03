@@ -2,6 +2,7 @@
 - name: service restart nginx
   tags: nginx
   become: true
+  when: not nginx_config_only
   service:
     state: restarted
     name: nginx
@@ -9,6 +10,7 @@
 - name: service reload nginx
   tags: nginx
   become: true
+  when: not nginx_config_only
   service:
     state: reloaded
     name: nginx
