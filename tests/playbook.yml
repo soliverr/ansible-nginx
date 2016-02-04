@@ -30,11 +30,6 @@
       when: ansible_distribution == 'CentOS'
       become: true
       yum: state=present name=epel-release
-    - name: Create /etc/facts.d
-      become: true
-      file:
-        state: directory
-        path: /etc/ansible/facts.d
   roles:
     - ansible-nginx
 
