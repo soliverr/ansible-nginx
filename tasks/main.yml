@@ -166,5 +166,4 @@
   changed_when: false
   notify: service reload nginx
   when: tlscert_changed|default(false)
-  debug:
-    msg: "{{ tlscert_changed|default(false) }}"
+  command: "true"
