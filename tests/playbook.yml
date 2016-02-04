@@ -75,10 +75,9 @@
 # nginx_config_only was true the first time they got notified
 # which may be irritating
 - hosts: all
-  roles:
-    - role: ansible-nginx
+  vars:
       nginx_config_only: true
       nginx_config_basepath: /tmp/nginxConfig
-      nginx_config_only_become: false
+      nginx_become_enable: false
   roles:
-    - ansible-nginx
+    - role: ansible-nginx
