@@ -66,13 +66,18 @@
     - ansible-tlscert
     - ansible-nginx
 
-# This must be in a seperate play, else the handlers get executed because
-# nginx_config_only was true the first time they got notified
-# which may be irritating
+ This must be in a seperate play, else the handlers get executed because
+ nginx_config_only was true the first time they got notified
+ which may be irritating
 - hosts: all
   vars:
       nginx_config_only: true
       nginx_config_basepath: /tmp/nginxConfig
       nginx_become_enable: false
+      nginx_vhosts:
+      - servername: owncloud.mydomain.com
+        upstreamserver: owncloud.internal.mydomain.com
+        sslcert: /etc/owncloud.crt
+        sslkkey: /etc/owncloud.key
   roles:
     - role: ansible-nginx
