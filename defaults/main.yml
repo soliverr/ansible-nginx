@@ -17,3 +17,5 @@ nginx_default_sslkey: 'No default sslkey provided!'
 nginx_become_enable: "{{ util_action_become_enable|default(true) }}"
 nginx_config_only: false
 nginx_config_basepath: /etc/nginx
+nginx_service_allow_reload: "{{ util_module_service_allow_reload|default(true) }}"
+nginx_service_allow_restart: "{{ util_module_service_allow_restart|default(true) }}"

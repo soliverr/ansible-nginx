@@ -61,6 +61,9 @@ you can just use your own template. Also, information about ssl certificates and
 
 ## Role Variables
 
+Some of the role variables try to default to [silpion.util][1] provided values first to allow using a global configuration.
+Still there is no hard dependency on [silpion.util][1], this role can perfectly fine be used without it.
+
 * ``nginx_epel_enabled``: Wether epel is enabled (boolean, default if available: ``{{ ansible_local.util.epel.enabled }}`` else: ``false``)
 * ``nginx_worker_processes``: Amount of nginx worker processes (int, default: ``{{ ansible_processor_vcpus }}``)
 * ``nginx_worker_connections``: Amount of nginx worker connections (int, default: ``768``)
@@ -80,9 +83,11 @@ you can just use your own template. Also, information about ssl certificates and
 * ``nginx_vhosts``: Dictionary to configure nginx virtual hosts (dict, default: ``[]``)
 * ``nginx_template_use_cow``: Whether to use Ansible cow instead of ``{{ ansible_managed}}`` as header in templates (string, default: ``util_template_use_cow|default(true)`` )
 * ``nginx_httpd_can_network_connect``: Wheter to enable the ``httpd_can_network_connect`` SEBoolean (bool, default: ``true``)
-* ``nginx_become_enable``: Whether to use become (bool, default: ``{{util_action_become_enable|default(true)}}``)
+* ``nginx_become_enable``: Whether to use become (bool, default: ``{{ util_action_become_enable|default(true) }}``)
 * ``nginx_config_basepath``: The basepath for all config files (string, default: ``/etc/nginx``)
-* ``nginx_config_only``: Whether to output configuration files only (bool, dfault: ``false``)
+* ``nginx_config_only``: Whether to output configuration files only (bool, default: ``false``)
+* ``nginx_service_allow_reload``: Whether to allow this role to reload NginX (bool, default: ``util_module_service_allow_reload|default(true)``)
+* ``nginx_service_allow_restart``: Whether to allow this role to restart NginX (bool, default: ``util_module_service_allow_reload|default(true)``)
 
 ### nginx_config_only
 
@@ -177,6 +182,8 @@ Ruby with rake and bundler available.
 * Alvaro Aleman @aleman silpion.de
 * Mark Kusch @mark.kusch silpion.de
 * Anja Siek @siek silpion.de
+
+[1]: https://github.com/silpion/ansible-util
 
 
 <!-- vim: set nofen ts=4 sw=4 et: -->
