@@ -113,7 +113,7 @@
   tags: nginx
   notify: service reload nginx
   become: "{{ nginx_become_enable }}"
-  with_items: nginx_vhosts
+  with_items: "{{ nginx_vhosts }}"
   template:
     src: "{{ item.template|default('builtin_rproxy.conf.j2') }}"
     dest: "{{ nginx_config_basepath + '/conf.d/' + item['servername'] + '.conf' }}"
