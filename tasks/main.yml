@@ -70,7 +70,7 @@
 - name: Install required packages
   tags: nginx
   become: "{{ nginx_become_enable }}"
-  with_items: nginx_required_packages
+  with_items: "{{ nginx_required_packages }}"
   when: not nginx_config_only
   action: "{{ ansible_pkg_mgr }} state=installed name={{ item }}"
 
