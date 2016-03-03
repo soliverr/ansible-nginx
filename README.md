@@ -27,6 +27,24 @@ A role to deploy nginx
     nginx_vhosts:
       - servername: filer.mydomain.com
         template: filertemplate.j2
+  roles:
+    - ansible-nginx
+```
+
+```yaml
+- name: Create only the configuration for a reverse proxy
+  hosts: localhost
+  vars:
+    nginx_become_enable: false
+    nginx_config_only: true
+    nginx_config_basepath: /var/dockerfiles/proxy/config
+    nginx_vhosts:
+      - servername: owncloud.mydomain.com
+        upstreamserver: owncloud.internal.mydomain.com
+        sslcert: /etc/owncloud.crt
+        sslkkey: /etc/owncloud.key
+  roles:
+    - ansible-nginx
 ```
 
 # Description
@@ -42,6 +60,9 @@ you can just use your own template. Also, information about ssl certificates and
 
 
 ## Role Variables
+
+Some of the role variables try to default to [silpion.util][1] provided values first to allow using a global configuration.
+Still there is no hard dependency on [silpion.util][1], this role can perfectly fine be used without it.
 
 * ``nginx_epel_enabled``: Wether epel is enabled (boolean, default if available: ``{{ ansible_local.util.epel.enabled }}`` else: ``false``)
 * ``nginx_worker_processes``: Amount of nginx worker processes (int, default: ``{{ ansible_processor_vcpus }}``)
@@ -62,6 +83,17 @@ you can just use your own template. Also, information about ssl certificates and
 * ``nginx_vhosts``: Dictionary to configure nginx virtual hosts (dict, default: ``[]``)
 * ``nginx_template_use_cow``: Whether to use Ansible cow instead of ``{{ ansible_managed}}`` as header in templates (string, default: ``util_template_use_cow|default(true)`` )
 * ``nginx_httpd_can_network_connect``: Wheter to enable the ``httpd_can_network_connect`` SEBoolean (bool, default: ``true``)
+* ``nginx_become_enable``: Whether to use become (bool, default: ``{{ util_action_become_enable|default(true) }}``)
+* ``nginx_config_basepath``: The basepath for all config files (string, default: ``/etc/nginx``)
+* ``nginx_config_only``: Whether to output configuration files only (bool, default: ``false``)
+* ``nginx_service_allow_reload``: Whether to allow this role to reload NginX (bool, default: ``util_module_service_allow_reload|default(true)``)
+* ``nginx_service_allow_restart``: Whether to allow this role to restart NginX (bool, default: ``util_module_service_allow_reload|default(true)``)
+
+### nginx_config_only
+
+This option makes the role spit out all configuration files without installing packages or touching services.
+Use cases could be creating a config that will be used by a Docker container.
+For most cases, this option will be used in conjunction with ``nginx_config_basepath`` and ``nginx_become_enable``
 
 ### nginx_vhosts
 
@@ -82,34 +114,26 @@ from the template by using ``{{ item.myowntemplatevariable }}``.
 The second approach is to use the provided ``builtin_rproxy.j2`` template which is
 a standard reverse proxy with a HTTP 302 redirect to HTTPS for all HTTP requests.
 
-Below is a sample ``nginx_vhosts`` with all possible options.
+Below is a sample ``nginx_vhosts`` with all possible options:
 
 ```yaml
 nginx_vhosts:
   - servername: reverseproxy.example.com
-    server_aliases: ["www.reverseproxy.example.com"]    # default: omitted
-    upstreamserver: backend.example.com                 # (mandatory)
-    sslcert: /etc/pki/tls/certs/my.crt                  # default: ansible_local['tlscert']['certs'][item['servername']]['crt']|default(nginx_default_sslcert)
-    sslkey:  /etc/pki/tls/private/my.key                # default: ansible_local['tlscert']['certs'][item['servername']]['key']|default(nginx_default_sslkey)
-    https_port: 90001                                   # default: 443
-    http_port: 9000                                     # default: 80
-    ssl: false                                          # default: nginx_ssl_enable
-    maxbodysize: 0                                      # default: 10m
-    proxy_read_timeout: 300s                            # default: 60s
-    upstreamserverproto: https                          # default: http
-    upstreamport: 8080                                  # default: omitted
-    default_server: true                                # default: omitted
-    htpasswd:                                           # If omitted, htpasswd wont get configured
+    server_aliases: ["www.reverseproxy.example.com"]  # default: omitted
+    upstreamserver: backend.example.com               # (mandatory)
+    sslcert: /etc/pki/tls/certs/my.crt                # default: ansible_local['tlscert']['certs'][item['servername']]['crt']|default(nginx_default_sslcert)
+    sslkey:  /etc/pki/tls/private/my.key              # default: ansible_local['tlscert']['certs'][item['servername']]['key']|default(nginx_default_sslkey)
+    https_port: 90001                                 # default: 443
+    http_port: 9000                                   # default: 80
+    ssl: false                                        # default: nginx_ssl_enable
+    maxbodysize: 0                                    # default: 10m
+    proxy_read_timeout: 300s                          # default: 60s
+    upstreamserverproto: https                        # default: http
+    upstreamport: 8080                                # default: omitted
+    default_server: true                              # default: omitted
+    htpasswd:                                         # If omitted, htpasswd wont get configured
       - name: mybasicauthuser
         password: strongpass
-```
-
-## Example Playbook
-
-```yaml
-- hosts: all
-  roles:
-     - ansible-nginx
 ```
 
 ## Contributing
@@ -155,7 +179,11 @@ Ruby with rake and bundler available.
 
 ## Author information
 
-Alvaro Aleman @aleman silpion.de
+* Alvaro Aleman @aleman silpion.de
+* Mark Kusch @mark.kusch silpion.de
+* Anja Siek @siek silpion.de
+
+[1]: https://github.com/silpion/ansible-util
 
 
 <!-- vim: set nofen ts=4 sw=4 et: -->

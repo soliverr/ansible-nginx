@@ -1,14 +1,20 @@
 ---
 - name: service restart nginx
   tags: nginx
-  become: true
+  become: "{{ nginx_become_enable }}"
+  when:
+    - nginx_service_allow_restart
+    - not nginx_config_only
   service:
     state: restarted
     name: nginx
 
 - name: service reload nginx
   tags: nginx
-  become: true
+  become: "{{ nginx_become_enable }}"
+  when:
+    - nginx_service_allow_reload
+    - not nginx_config_only
   service:
     state: reloaded
     name: nginx

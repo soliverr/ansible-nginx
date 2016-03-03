@@ -19,15 +19,15 @@
 
 server {
 {% if https %}
-  listen {{ item.https_port|default('443')}} ssl{% if item.default_server is defined %} default_server {%- endif %};
+  listen {{ item.https_port|default('443') }} ssl{% if item.default_server is defined %} default_server {%- endif %};
 {% else %}
-  listen {{ item.http_port|default('80')}}{% if item.default_server is defined %} default_server {%- endif %};
+  listen {{ item.http_port|default('80') }}{% if item.default_server is defined %} default_server {%- endif %};
 {% endif %}
 {% if nginx_ipv6_enable %}
 {% if https %}
-  listen [::]:{{ item.https_port|default('443')}} ssl;
+  listen [::]:{{ item.https_port|default('443') }} ssl;
 {% else %}
-  listen [::]:{{ item.http_port|default('80')}};
+  listen [::]:{{ item.http_port|default('80') }};
 {% endif %}
 {% endif %}
 
@@ -47,12 +47,12 @@ server {
   location / {
 {% if item.htpasswd is defined %}
     auth_basic "Credentials required:";
-    auth_basic_user_file /etc/nginx/conf.d/{{ item.servername}}.htpasswd;
+    auth_basic_user_file {{ nginx_config_basepath }}/conf.d/{{ item.servername }}.htpasswd;
 {% endif %}
 {% if item.proxy_read_timeout is defined %}
     proxy_read_timeout {{ item.proxy_read_timeout }};
 {% endif %}
-    include /etc/nginx/proxy_params;
+    include {{ nginx_config_basepath }}/proxy_params;
     {% if item.upstreamport is defined %}
     proxy_pass {{ item.upstreamserverproto|default('http') }}://{{ item.upstreamserver }}:{{ item.upstreamport }};
     {% else %}

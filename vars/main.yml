@@ -14,12 +14,12 @@ nginx_role_version: "{{ lookup('file', role_path + '/VERSION') }}"
 # These variables are provided here to not have all the mapping + defaulting code for certs/keys redundant in multiple templates
 ## TLSCert related mappings
 nginx_tlscert_available: "{{ true if ansible_local is defined and ansible_local['tlscert'] is defined else false }}"
-nginx_tlscert_curAvailable: "{{ true if nginx_tlscert_available and ansible_local['tlscert']['certs'][item['servername']] is defined else false}}"
-nginx_tlscert_crt: "{{ ansible_local['tlscert']['certs'][item['servername']]['crt'] if nginx_tlscert_curAvailable else false}}"
-nginx_tlscert_key: "{{ ansible_local['tlscert']['certs'][item['servername']]['key'] if nginx_tlscert_curAvailable else false}}"
+nginx_tlscert_curAvailable: "{{ true if nginx_tlscert_available and ansible_local['tlscert']['certs'][item['servername']] is defined else false }}"
+nginx_tlscert_crt: "{{ ansible_local['tlscert']['certs'][item['servername']]['crt'] if nginx_tlscert_curAvailable else false }}"
+nginx_tlscert_key: "{{ ansible_local['tlscert']['certs'][item['servername']]['key'] if nginx_tlscert_curAvailable else false }}"
 ## Internal mappings
 nginx_internal_sslcrt: "{{ (nginx_sslcert_basepath + '/' if nginx_sslcert_basepath is defined else '') + item['sslcert']|default(nginx_default_sslcert) }}"
 nginx_internal_sslkey: "{{ (nginx_sslcert_basepath + '/' if nginx_sslcert_basepath is defined else '') + item['sslkey']|default(nginx_default_sslkey) }}"
 ## Finally our cert and key!
-nginx_cur_sslcrt: "{{ nginx_tlscert_crt|default(nginx_internal_sslcrt, true)}}"
-nginx_cur_sslkey: "{{ nginx_tlscert_key|default(nginx_internal_sslkey, true)}}"
+nginx_cur_sslcrt: "{{ nginx_tlscert_crt|default(nginx_internal_sslcrt, true) }}"
+nginx_cur_sslkey: "{{ nginx_tlscert_key|default(nginx_internal_sslkey, true) }}"

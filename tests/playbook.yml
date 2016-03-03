@@ -15,26 +15,27 @@
   pre_tasks:
     - name: Copy testcerts
       with_items:
-        - { name: 'testcert.pem', mode: '0644' }
-        - { name: 'wildcard.pem', mode: '0644' }
-        - { name: 'testkey.key', mode: '0600' }
-        - { name: 'wildcard.key', mode: '0600' }
+        - name: testcert.pem
+          mode: '0644'
+        - name: testcert.key
+          mode: '0644'
+        - name: wildcard.pem
+          mode: '0644'
+        - name: wildcard.key
+          mode: '0600'
       become: true
       copy:
-        src="{{ item.name }}"
-        dest="/etc/{{ item.name }}"
-        owner=0
-        group=0
-        mode="{{ item.mode }}"
+        src: "{{ item.name }}"
+        dest: "/etc/{{ item.name }}"
+        owner: 0
+        group: 0
+        mode: "{{ item.mode }}"
     - name: Install epel
       when: ansible_distribution == 'CentOS'
       become: true
-      yum: state=present name=epel-release
-    - name: Create /etc/facts.d
-      become: true
-      file:
-        state: directory
-        path: /etc/ansible/facts.d
+      yum:
+        name: epel-release
+        state: present
   roles:
     - ansible-nginx
 
@@ -70,3 +71,19 @@
   roles:
     - ansible-tlscert
     - ansible-nginx
+
+# This must be in a seperate play, else the handlers get executed because
+# nginx_config_only was true the first time they got notified
+# which may be irritating
+- hosts: all
+  vars:
+      nginx_config_only: true
+      nginx_config_basepath: /tmp/nginxConfig
+      nginx_become_enable: false
+      nginx_vhosts:
+      - servername: owncloud.mydomain.com
+        upstreamserver: owncloud.internal.mydomain.com
+        sslcert: /etc/owncloud.crt
+        sslkkey: /etc/owncloud.key
+  roles:
+    - role: ansible-nginx
