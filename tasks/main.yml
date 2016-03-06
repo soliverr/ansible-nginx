@@ -100,14 +100,16 @@
     dest: "{{ nginx_config_basepath + '/tls_params'}}"
     mode: 0644
 
-- name: Deploy proxy_params
+- name: Deploy static configuration files
   tags: nginx
   notify: service reload nginx
   become: "{{ nginx_become_enable }}"
+  with_items:
+    - proxy_params
+    - mime.types
   copy:
-    src: proxy_params
-    dest: "{{ nginx_config_basepath + '/proxy_params'}}"
-    mode: 0644
+    src: "{{ item }}"
+    dest: "{{ nginx_config_basepath + '/' + item }}"
 
 - name: Deploy vhosts
   tags: nginx
