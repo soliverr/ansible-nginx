@@ -12,8 +12,6 @@ nginx_util_fact_epel_enabled: "{{ ansible_local.util.epel.enable if ansible_loca
 nginx_epel_enabled: "{{ nginx_util_fact_epel_enabled }}"
 nginx_template_use_cow: "{{ util_template_use_cow|default(true) }}"
 nginx_httpd_can_network_connect: true
-nginx_default_sslcert: 'No default sslcert provided!'
-nginx_default_sslkey: 'No default sslkey provided!'
 nginx_become_enable: "{{ util_action_become_enable|default(true) }}"
 nginx_config_only: false
 nginx_config_basepath: /etc/nginx
