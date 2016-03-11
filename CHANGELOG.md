@@ -1,3 +1,29 @@
+# 2.1.0
+Alvaro Aleman (18):
+
+* Add testcase for tlscert usage
+* Try to use tlscert facts for sslcerts+keys
+* Use tlscert\_changed to trigger service reload events
+* Update README
+* Enable ipv6 by default
+* Add a seperate testplay for nginx without tlscert
+* Use command: true instead of register to trigger handler
+* Add tests for config only configuration
+* Skip not required tasks when nginx\_config\_only
+* Avoid Vagrant sync for centos/7 box
+* Make become configurable
+* Update readme
+* Add a vhost to config\_only testplay
+* Fixup "Notify reload nginx when tlscert\_changed" task
+* Consistently stick to coding style
+* Add nginx\_service\_allow\_{restart,reload} parameters
+* Fix handler conditions
+* Dont use bare variables in loops
+
+Mark Kusch (1):
+
+* Fix last occurence of bare variables in loops
+
 # 2.0.1
 
 
