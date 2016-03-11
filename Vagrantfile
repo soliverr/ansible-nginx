@@ -15,6 +15,7 @@ Vagrant.configure(VAGRANT_API_VERSION) do |config|
 
     d.vm.hostname = 'ansiblenginxtest'
     d.vm.synced_folder '.', '/vagrant', id: 'vagrant-root', disabled: true
+    d.vm.synced_folder '.', '/home/vagrant/sync', disabled: true
 
     d.vm.provision :ansible do |ansible|
       ansible.playbook = 'tests/playbook.yml'

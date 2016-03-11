@@ -1,6 +1,7 @@
 ---
 - name: Assert supported OS
   tags: nginx
+  when: not nginx_config_only
   assert:
     that:
       - ansible_os_family in nginx_supported_platforms
@@ -11,9 +12,20 @@
   tags: nginx
   include_vars: "{{ ansible_os_family }}.yml"
 
+- name: Install required directories
+  tags: nginx
+  with_items:
+    - "{{ nginx_config_basepath }}"
+    - "{{ nginx_config_basepath + '/conf.d' }}"
+  become: "{{ nginx_become_enable }}"
+  file:
+    state: directory
+    path: "{{ item }}"
+
 - name: Install Ansible facts.d directory
   tags: nginx
-  become: true
+  become: "{{ nginx_become_enable }}"
+  when: not nginx_config_only
   file:
     state: directory
     dest: /etc/ansible/facts.d
@@ -23,7 +35,8 @@
 
 - name: Install nginx facts
   tags: nginx
-  become: true
+  become: "{{ nginx_become_enable }}"
+  when: not nginx_config_only
   template:
     src: facts.j2
     dest: /etc/ansible/facts.d/nginx.fact
@@ -38,75 +51,72 @@
 
 - name: Assert epel is enabled
   tags: nginx
-  when: ansible_os_family == 'RedHat'
+  when:
+    - ansible_os_family == 'RedHat'
+    - not nginx_config_only
   assert:
     that: nginx_epel_enabled
 
 - name: Update apt package cache
   tags: nginx
-  become: true
-  when: ansible_os_family == 'Debian'
+  become: "{{ nginx_become_enable }}"
+  when:
+    - ansible_os_family == 'Debian'
+    - not nginx_config_only
   apt:
     update_cache: true
     cache_valid_time: "{{ util_apt_cache_valid_time|default(3600) }}"
 
 - name: Install required packages
   tags: nginx
-  become: true
-  with_items: nginx_required_packages
+  become: "{{ nginx_become_enable }}"
+  with_items: "{{ nginx_required_packages }}"
+  when: not nginx_config_only
   action: "{{ ansible_pkg_mgr }} state=installed name={{ item }}"
 
 - name: Ensure default vhost is absent
   tags: nginx
   notify: service reload nginx
-  become: true
+  become: "{{ nginx_become_enable }}"
   file:
     state: absent
-    path: /etc/nginx/sites-enabled/default
+    path: "{{ nginx_config_basepath + '/sites-enabled/default' }}"
 
 - name: Deploy nginx.conf
   tags: nginx
   notify: service restart nginx
-  become: true
+  become: "{{ nginx_become_enable }}"
   template:
     src: "{{ nginx_template_conf|default('builtin_nginx.conf.j2') }}"
-    dest: /etc/nginx/nginx.conf
-    owner: 0
-    group: 0
+    dest: "{{ nginx_config_basepath + '/nginx.conf'}}"
     mode: 0644
 
 - name: Deploy tls_params
   tags: nginx
   notify: service restart nginx
-  become: true
+  become: "{{ nginx_become_enable }}"
   template:
     src: "{{ nginx_template_params_tls|default('builtin_tls_params.j2') }}"
-    dest: /etc/nginx/tls_params
-    owner: 0
-    group: 0
+    dest: "{{ nginx_config_basepath + '/tls_params'}}"
     mode: 0644
 
 - name: Deploy proxy_params
   tags: nginx
   notify: service reload nginx
-  become: true
+  become: "{{ nginx_become_enable }}"
   copy:
     src: proxy_params
-    dest: /etc/nginx/proxy_params
-    owner: 0
-    group: 0
+    dest: "{{ nginx_config_basepath + '/proxy_params'}}"
     mode: 0644
 
 - name: Deploy vhosts
   tags: nginx
   notify: service reload nginx
-  become: true
-  with_items: nginx_vhosts
+  become: "{{ nginx_become_enable }}"
+  with_items: "{{ nginx_vhosts }}"
   template:
     src: "{{ item.template|default('builtin_rproxy.conf.j2') }}"
-    dest: /etc/nginx/conf.d/{{ item.servername }}.conf
-    owner: 0
-    group: 0
+    dest: "{{ nginx_config_basepath + '/conf.d/' + item['servername'] + '.conf' }}"
     mode: 0644
 
 - name: Deploy htpasswd
@@ -114,29 +124,30 @@
   with_subelements:
     - "{{ nginx_vhosts|selectattr('htpasswd', 'defined')|list }}"
     - htpasswd
-  become: true
+  become: "{{ nginx_become_enable }}"
   htpasswd:
     state: present
-    path: "/etc/nginx/conf.d/{{ item.0.servername}}.htpasswd"
+    path: "{{ nginx_config_basepath + '/conf.d/' + item[0]['servername']}}"
     name: "{{ item.1.name }}"
     password: "{{ item.1.password }}"
 
 - name: Register SELinux state
   tags: nginx
-  become: true
   always_run: true
   ignore_errors: true
   failed_when: false
   changed_when: false
   register: nginx_registered_selinux_state
+  become: "{{ nginx_become_enable }}"
   command: selinuxenabled
 
 - name: Set httpd_can_network_connect
   tags: nginx
-  become: true
+  become: "{{ nginx_become_enable }}"
   when:
     - nginx_registered_selinux_state.rc == 0
     - nginx_httpd_can_network_connect
+    - not nginx_config_only
   seboolean:
     state: true
     persistent: true
@@ -150,13 +161,21 @@
 - name: Check config
   tags: nginx
   changed_when: false
-  become: true
+  become: "{{ nginx_become_enable }}"
+  when: not nginx_config_only
   command: 'nginx -t'
 
 - name: Ensure nginx service
   tags: nginx
-  become: true
+  become: "{{ nginx_become_enable }}"
+  when: not nginx_config_only
   service:
     state: started
     name: nginx
     enabled: yes
+
+- name: Notify reload nginx when tlscert_changed
+  tags: nginx
+  notify: service reload nginx
+  when: tlscert_changed|default(false)
+  command: "true"
