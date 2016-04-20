@@ -127,7 +127,7 @@
   become: "{{ nginx_become_enable }}"
   htpasswd:
     state: present
-    path: "{{ nginx_config_basepath + '/conf.d/' + item[0]['servername']}}"
+    path: "{{ nginx_config_basepath + '/conf.d/' + item[0]['servername'] + '.htpasswd'}}"
     name: "{{ item.1.name }}"
     password: "{{ item.1.password }}"
 
