@@ -1,3 +1,9 @@
+# 2.1.1
+
+
+* Fix htpasswd functionality, add tests for it
+
+Alvaro Aleman (1):
 # 2.1.0
 Alvaro Aleman (18):
 
