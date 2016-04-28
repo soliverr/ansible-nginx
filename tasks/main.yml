@@ -140,8 +140,8 @@
 
 - name: Protect dhparam
   tags: nginx
-  become: "{{ nginx_become_enable }}"
-  when: not nginx_config_only
+  become: true
+  when: "{{ nginx_become_enable }}"
   file:
     path: "{{ nginx_dhparam_path }}"
     owner: 0
