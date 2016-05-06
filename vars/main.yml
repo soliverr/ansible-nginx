@@ -23,3 +23,5 @@ nginx_internal_sslkey: "{{ (nginx_sslcert_basepath + '/' if nginx_sslcert_basepa
 ## Finally our cert and key!
 nginx_cur_sslcrt: "{{ nginx_tlscert_crt|default(nginx_internal_sslcrt, true) }}"
 nginx_cur_sslkey: "{{ nginx_tlscert_key|default(nginx_internal_sslkey, true) }}"
+
+lib_action_become_enable: "{{ nginx_become_enable }}"

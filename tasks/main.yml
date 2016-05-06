@@ -22,32 +22,14 @@
     state: directory
     path: "{{ item }}"
 
-- name: Install Ansible facts.d directory
-  tags: nginx
-  become: "{{ nginx_become_enable }}"
-  when: not nginx_config_only
-  file:
-    state: directory
-    dest: /etc/ansible/facts.d
-    owner: 0
-    group: 0
-    mode: 0755
-
 - name: Install nginx facts
   tags: nginx
   become: "{{ nginx_become_enable }}"
   when: not nginx_config_only
-  template:
-    src: facts.j2
-    dest: /etc/ansible/facts.d/nginx.fact
-    owner: 0
-    group: 0
-    mode: 0644
-
-- name: Re-read local facts
-  tags: nginx
-  setup:
-    filter: ansible_local
+  include: "{{ role_path }}/../silpion.lib/tasks/localfacts.yml"
+  vars:
+    template: facts.j2
+    namespace: nginx
 
 - name: Assert epel is enabled
   tags: nginx
