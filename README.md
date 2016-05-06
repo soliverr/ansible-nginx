@@ -58,7 +58,7 @@ you can just use your own template. Also, information about ssl certificates and
 * CentOS 7 with Epel enabled
 * Ubuntu Trusty
 
-## Dependencys
+## Dependencies
 
 * [sillpion.lib](https://github.com/silpion/ansible-util)
 
