@@ -58,6 +58,10 @@ you can just use your own template. Also, information about ssl certificates and
 * CentOS 7 with Epel enabled
 * Ubuntu Trusty
 
+## Dependencys
+
+* [sillpion.lib](https://github.com/silpion/ansible-util)
+
 
 ## Role Variables
 
