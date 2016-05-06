@@ -19,3 +19,5 @@ nginx_config_only: false
 nginx_config_basepath: /etc/nginx
 nginx_service_allow_reload: "{{ util_module_service_allow_reload|default(true) }}"
 nginx_service_allow_restart: "{{ util_module_service_allow_restart|default(true) }}"
+nginx_dhparam_path: "{{ nginx_config_basepath }}/dhparam.pem"
+nginx_dhparam_strength: "{{ '512' if ansible_user == 'vagrant' else '4096' }}"

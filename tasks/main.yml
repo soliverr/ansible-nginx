@@ -131,6 +131,24 @@
     name: "{{ item.1.name }}"
     password: "{{ item.1.password }}"
 
+- name: Generate dhparam
+  tags: nginx
+  become: "{{ nginx_become_enable }}"
+  command: openssl dhparam -out {{ nginx_dhparam_path }} {{ nginx_dhparam_strength }}
+  args:
+    creates: "{{ nginx_dhparam_path }}"
+
+- name: Protect dhparam
+  tags: nginx
+  become: true
+  when: "{{ nginx_become_enable }}"
+  file:
+    path: "{{ nginx_dhparam_path }}"
+    owner: 0
+    group: 0
+    mode: 0600
+
+
 - name: Register SELinux state
   tags: nginx
   always_run: true
