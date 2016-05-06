@@ -10,7 +10,7 @@
 
 - name: Include OS familiy specific vars
   tags: nginx
-  include_vars: "{{ ansible_os_family }}.yml"
+  include: "{{ role_path }}/../silpion.lib/tasks/os-specific-vars.yml"
 
 - name: Install required directories
   tags: nginx
