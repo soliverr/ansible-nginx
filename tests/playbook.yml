@@ -44,7 +44,7 @@
         - test
         - nginx
       register: registered_curl_htpasswd
-      failed_when: "{{ registered_curl_htpasswd.stdout in ['403', '401'] }}"
+      failed_when: "{{ registered_curl_htpasswd.stdout in '403 401' }}"
       changed_when: False
       command:
         curl -s -o /dev/null -I
@@ -58,7 +58,7 @@
         - test
         - nginx
       register: registered_curl_htpasswd
-      failed_when: "{{ registered_curl_htpasswd.stdout not in  ['403', '401'] }}"
+      failed_when: "{{ registered_curl_htpasswd.stdout not in  '403 401' }}"
       changed_when: False
       command:
         curl -s -o /dev/null -I
