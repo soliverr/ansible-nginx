@@ -60,7 +60,7 @@ you can just use your own template. Also, information about ssl certificates and
 
 ## Dependencies
 
-* [sillpion.lib](https://github.com/silpion/ansible-lib)
+* [silpion.lib](https://github.com/silpion/ansible-lib)
 
 Dependencys can be installed via ``ansible-galaxy install`` using the provided ``requirements.yml`` file.
 
