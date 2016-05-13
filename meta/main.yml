@@ -15,5 +15,5 @@ galaxy_info:
   categories:
   - web
 dependencies:
-  - src: https://github.com/silpion/ansible-util
-    name: silpion.util
+  - src: https://github.com/silpion/ansible-lib
+    name: silpion.lib
