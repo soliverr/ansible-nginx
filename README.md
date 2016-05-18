@@ -58,6 +58,11 @@ you can just use your own template. Also, information about ssl certificates and
 * CentOS 7 with Epel enabled
 * Ubuntu Trusty
 
+## Dependencies
+
+* [silpion.lib](https://github.com/silpion/ansible-lib)
+
+Dependencys can be installed via ``ansible-galaxy install`` using the provided ``requirements.yml`` file.
 
 ## Role Variables
 
