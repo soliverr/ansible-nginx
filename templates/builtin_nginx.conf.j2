@@ -37,10 +37,10 @@ http {
   types_hash_max_size 2048;
   server_names_hash_bucket_size {{ nginx_server_names_hash_bucket_size }};
 
-  include             {{ nginx_config_basepath }}/mime.types;
+  include             mime.types;
   default_type        application/octet-stream;
 
-  include {{ nginx_config_basepath }}/tls_params;
-  include {{ nginx_config_basepath }}/conf.d/*.conf;
-  include {{ nginx_config_basepath }}/sites-enabled/*;
+  include tls_params;
+  include conf.d/*.conf;
+  include sites-enabled/*;
 }
