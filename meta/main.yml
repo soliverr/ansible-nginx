@@ -1,19 +1,21 @@
 ---
 galaxy_info:
-  author: your name
-  description: 
+  author: Alvaro Aleman
+  description: Installs and configures the NginX webserver
   company: http://silpion.de
-  license: license (AGPL v3)
+  license: AGPLv3
   min_ansible_version: 2.0.0.2
   platforms:
   - name: EL
     versions:
-    - 7
+      - 7
   - name: Ubuntu
     versions:
-    - trusty
+      - trusty
+      - xenial
   categories:
-  - web
+    - web
+    - nginx
 dependencies:
   - src: https://github.com/silpion/ansible-lib
     name: silpion.lib
