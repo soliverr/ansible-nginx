@@ -1,3 +1,26 @@
+# 2.2.0
+
+
+* Update Ansible Galaxy info
+* Add support for Ubuntu Xenial
+* Dont set lib_action_become_enable
+* Fix typo in README
+* Use uri module to test htpasswd
+* Fix dependencys and dependency documentation
+* Fix typo in README
+* Use silpion.lib for variable inclusion
+* Use silpion.lib for fact deployment
+* Fix htpasswd tests
+* Add silpion.lib dependency
+* Only change owner of dhparam file if become is enabled
+* Create a dhparam file by default
+* Make certificate name default to servername
+* Use role to deploy mime.types
+* Fix htpasswd filename
+* Use relative paths in builtin_rproxy template
+* Avoid wrong include path in config only mode
+
+Alvaro Aleman (18):
 # 2.1.1
 
 

@@ -58,6 +58,11 @@ you can just use your own template. Also, information about ssl certificates and
 * CentOS 7 with Epel enabled
 * Ubuntu Trusty
 
+## Dependencies
+
+* [silpion.lib](https://github.com/silpion/ansible-lib)
+
+Dependencys can be installed via ``ansible-galaxy install`` using the provided ``requirements.yml`` file.
 
 ## Role Variables
 
@@ -88,6 +93,8 @@ Still there is no hard dependency on [silpion.util][1], this role can perfectly 
 * ``nginx_config_only``: Whether to output configuration files only (bool, default: ``false``)
 * ``nginx_service_allow_reload``: Whether to allow this role to reload NginX (bool, default: ``util_module_service_allow_reload|default(true)``)
 * ``nginx_service_allow_restart``: Whether to allow this role to restart NginX (bool, default: ``util_module_service_allow_reload|default(true)``)
+* ``nginx_dhparam_path``: Path of the dhparam path (string, default: ``{{ nginx_config_basepath }}/dhparam.pem``)
+* ``nginx_dhparam_strength``: Bits used for the dhparam file (int, default: ``{{ '512' if ansible_user == 'vagrant' else '4096' }}``)
 
 ### nginx_config_only
 

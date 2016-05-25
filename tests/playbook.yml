@@ -38,36 +38,31 @@
         state: present
   roles:
     - ansible-nginx
-  tasks:
+  post_tasks:
     - name: Test htpasswd functionality 1
       tags:
         - test
         - nginx
-      register: registered_curl_htpasswd
-      failed_when: "{{ registered_curl_htpasswd.stdout in ['403', '401'] }}"
-      changed_when: False
-      command:
-        curl -s -o /dev/null -I
-          -w "%{http_code}"
-          -k
-          -u {{ ((nginx_vhosts|first).htpasswd|first).name}}:{{ ((nginx_vhosts|first).htpasswd|first).password}}
-          -H 'Host:{{" " ~ (nginx_vhosts|first).servername}}'
-          https://localhost
+      uri:
+        url: "https://localhost"
+        user: "{{ ((nginx_vhosts|first).htpasswd|first).name}}"
+        password: "{{ ((nginx_vhosts|first).htpasswd|first).password }}"
+        status_code: '404'
+        validate_certs: false
+        headers:
+          Host: "{{ (nginx_vhosts|first).servername }}"
     - name: Test htpasswd functionality 2
       tags:
         - test
         - nginx
-      register: registered_curl_htpasswd
-      failed_when: "{{ registered_curl_htpasswd.stdout not in  ['403', '401'] }}"
-      changed_when: False
-      command:
-        curl -s -o /dev/null -I
-          -w "%{http_code}"
-          -k
-          -u TheseAreNotValid:Credentials
-          -H 'Host:{{" " ~ (nginx_vhosts|first).servername}}'
-          https://localhost
-
+      uri:
+        url: "https://localhost"
+        user: InvalidUser
+        password: invalidPassword
+        status_code: '401, 403'
+        validate_certs: false
+        headers:
+          Host: "{{ (nginx_vhosts|first).servername }}"
 
 - hosts: all
   vars:
