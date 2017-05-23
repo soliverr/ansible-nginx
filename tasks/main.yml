@@ -77,10 +77,18 @@
   tags: nginx
   notify: service restart nginx
   become: "{{ nginx_become_enable }}"
+  when: "{{ nginx_ssl_enable }}"
   template:
     src: "{{ nginx_template_params_tls|default('builtin_tls_params.j2') }}"
-    dest: "{{ nginx_config_basepath + '/tls_params'}}"
+    dest: "{{ nginx_config_basepath + '/tls_params' }}"
     mode: 0644
+
+- name: Ensure tls_params file is absent
+  tags: nginx
+  notify: service restart nginx
+  become: "{{ nginx_become_enable }}"
+  when: "not {{ nginx_ssl_enable }}"
+  file: path="{{ nginx_config_basepath + '/tls_params' }}" state=absent
 
 - name: Deploy static configuration files
   tags: nginx
@@ -111,31 +119,38 @@
   become: "{{ nginx_become_enable }}"
   htpasswd:
     state: present
-    path: "{{ nginx_config_basepath + '/conf.d/' + item[0]['servername'] + '.htpasswd'}}"
+    path: "{{ nginx_config_basepath + '/conf.d/' + item[0]['servername'] + '.htpasswd' }}"
     name: "{{ item.1.name }}"
     password: "{{ item.1.password }}"
 
 - name: Generate dhparam
   tags: nginx
   become: "{{ nginx_become_enable }}"
+  when: "{{ nginx_ssl_enable }}"
   command: openssl dhparam -out {{ nginx_dhparam_path }} {{ nginx_dhparam_strength }}
   args:
     creates: "{{ nginx_dhparam_path }}"
 
+- name: Ensure dhparam file is absent
+  tags: nginx
+  notify: service restart nginx
+  become: "{{ nginx_become_enable }}"
+  when: not "{{ nginx_ssl_enable }}"
+  file: path="{{ nginx_dhparam_path }}" state=absent
+
 - name: Protect dhparam
   tags: nginx
   become: true
-  when: "{{ nginx_become_enable }}"
+  when: "{{ nginx_become_enable }} and {{ nginx_ssl_enable }}"
   file:
     path: "{{ nginx_dhparam_path }}"
     owner: 0
     group: 0
     mode: 0600
 
-
 - name: Register SELinux state
   tags: nginx
-  always_run: true
+  check_mode: no
   ignore_errors: true
   failed_when: false
   changed_when: false
