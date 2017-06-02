@@ -40,6 +40,16 @@ http {
   include             mime.types;
   default_type        application/octet-stream;
 
+{% if nginx_proxy_cache %}
+{% for c_i in nginx_proxy_cache %}
+  # Local content cache {{ c_i.name }}
+  proxy_cache_path {{c_i.path|default(nginx_proxy_cache_path) }} keys_zone={{ c_i.name }}:{{c_i.size|default(nginx_proxy_size) }}
+                   max_size={{ c_i.max_size|default(nginx_proxy_cache_size) }} inactive={{ c_i.inactive|default(nginx_proxy_cache_inactive) }}
+  ;
+
+{% endfor %}
+{% endif %}
+
 {% if nginx_ssl_enable %}
   include tls_params;
 {% endif %}

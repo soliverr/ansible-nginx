@@ -40,19 +40,23 @@ server {
 {% if not https and ssl %}
   return 302 https://$host$request_uri;
 {% else %}
-{% if not ssl or https %}
+  {% if not ssl or https %}
 
   client_max_body_size {{ item.maxbodysize|default('10m') }};
 
   location / {
-{% if item.htpasswd is defined %}
+    {% if item.htpasswd is defined %}
     auth_basic "Credentials required:";
     auth_basic_user_file conf.d/{{ item.servername }}.htpasswd;
-{% endif %}
-{% if item.proxy_read_timeout is defined %}
+    {% endif %}
+    {% if item.proxy_read_timeout is defined %}
     proxy_read_timeout {{ item.proxy_read_timeout }};
-{% endif %}
+    {% endif %}
     include proxy_params;
+
+    {% if item.proxy_cache is defined %}
+    proxy_cache {{ item.proxy_cache }};
+    {% endif %}
     {% if item.upstreamport is defined %}
     proxy_pass {{ item.upstreamserverproto|default('http') }}://{{ item.upstreamserver }}:{{ item.upstreamport }};
     {% else %}
@@ -61,8 +65,8 @@ server {
 
   }
 
-    {% endif %}
   {% endif %}
+{% endif %}
 
   error_log /var/log/nginx/{{ item.servername }}-error.log;
   access_log /var/log/nginx/{{ item.servername }}-access.log;
