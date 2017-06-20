@@ -52,7 +52,6 @@ server {
     {% if item.proxy_read_timeout is defined %}
     proxy_read_timeout {{ item.proxy_read_timeout }};
     {% endif %}
-    include proxy_params;
 
     {% if item.proxy_cache is defined %}
     proxy_cache {{ item.proxy_cache }};
@@ -62,6 +61,13 @@ server {
     {% else %}
     proxy_pass {{ item.upstreamserverproto|default('http') }}://{{ item.upstreamserver }};
     {% endif %}
+
+    {% if item.proxy_set_header is defined %}
+    proxy_set_header Host {{ item.proxy_set_header }};
+    {% endif %}
+
+    # All other proxy params
+    include proxy_params;
 
   }
 
