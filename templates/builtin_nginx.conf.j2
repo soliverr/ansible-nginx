@@ -50,6 +50,20 @@ http {
 {% endfor %}
 {% endif %}
 
+{% if nginx_upstreams %}
+{% for upstr in nginx_upstreams %}
+  # Upstream servers {{ upstr.name }}
+  upstream {{ upstr.name }} {
+    {% if upstr.options is defined %}
+    {{ upstr.options }}
+    {% endif %}
+    {% for serv in upstr.servers %}
+    server {{ serv.name }}{%if serv.port is defined %}:{{ serv.port }}{% endif %}{%if serv.options is defined %} {{ serv.options }}{% endif %};
+    {% endfor %}
+  }
+{% endfor %}
+{% endif %}
+
 {% if nginx_ssl_enable %}
   include tls_params;
 {% endif %}
