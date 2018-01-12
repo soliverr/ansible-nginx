@@ -24,4 +24,4 @@ nginx_proxy_cache_path: /tmp/NGINX_cache/
 nginx_proxy_cache_size: 10m
 nginx_proxy_cache_max_size: 100m
 nginx_proxy_cache_inactive: 60m
-
+nginx_config_backup: no
